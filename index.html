@@ -177,8 +177,16 @@
         <h4>Search-first, and filter + search on every column</h4>
         <p>Global search (see <a class="inline-link" href="#command-palette">§10</a>) is the primary way to find anything — not deep navigation trees. Every data table gets column-level filter <em>and</em> search (see <a class="inline-link" href="#tables">§14</a> and <a class="inline-link" href="#search-filters">Search &amp; filters</a>), not just a single global search box bolted on top. This is a Method rule, not a customer-portal nicety — it's the single most load-bearing pattern in an internal operational tool.</p>
 
-        <h4>Toolbar layout: informational left, consequential right</h4>
-        <p>Every toolbar (table menu, page secondary menu, any row that mixes finding-things with doing-things) is split into two clusters, never interleaved: <strong>Search + Filters on the left</strong> — non-destructive, reversible, they only change what you can see — and <strong>Actions/Views on the right</strong> — buttons that do something or change how the data is displayed (New, Export, Columns, card/list view toggle). Pattern: <code>Search &gt; Filters &nbsp;||&nbsp; Editor/Views</code>. Never put a filter chip and a "New Order" button in the same visual cluster — a user should be able to tell "this changes what I see" from "this changes something" without reading the label.</p>
+        <h4>Toolbar layout: everything that shows left, everything that does right</h4>
+        <p>Every toolbar (table menu, page secondary menu, any row that mixes finding-things with doing-things) is split into two clusters, never interleaved. The line is drawn by one test only: <strong>does this button fire a command that changes real data or state?</strong></p>
+        <ul>
+          <li><strong>Left — informational, whatever its size or importance:</strong> search, filters, and scope controls (e.g. a branch/subsidiary switch). None of these mutate anything — they only change what you can see. A big, important scope control is still left; it just gets more visual weight and anchors first (see ordering below). <strong>Importance changes size and position-within-left, never which side.</strong></li>
+          <li><strong>Right — commands, however minor:</strong> anything that fires and produces a result — New, Approve, Export, Delete, Columns, a card/list view toggle. If it has an icon-plus-button and does something when clicked, it's right, even if it feels small next to a big scope control on the left.</li>
+        </ul>
+        <p>Pattern: <code>Scope &gt; Filters &gt; Search &nbsp;||&nbsp; Actions/Views</code>. This split is a strict invariant precisely so position alone tells a user "safe to explore" from "this does something," without reading a label — mixing a scope switch and an "Approve Payment" button into one visual cluster because both feel "important" defeats that guarantee.</p>
+
+        <h4>Ordering and prominence follow the page hierarchy, side never does</h4>
+        <p>Within the left cluster, order broad-to-narrow and size by hierarchy level (see <a class="inline-link" href="#page-hierarchy">§8</a>): a page-wide <strong>scope control</strong> (branch/subsidiary — redefines every table and KPI on the page) anchors first and can run near full-width; a page-wide or table-local <strong>search</strong> sits next, narrower; table-specific <strong>filter chips</strong> come last, compact. A scope control that affects the whole page is <strong>page-level chrome</strong>, sitting above the table area — it does not live inside one table's own toolbar, even though it stays on the informational side. Each table's own local filter + search stays in that table's toolbar, smaller, because it's scoped to just that dataset.</p>
 
         <h4>Informational, never salesy</h4>
         <p>Copy states a fact and offers a neutral action — never manufactured urgency. "Saved pricing is held until 16 Jul" + "Review quotes →", not "Convert before pricing changes!" or "Only 2 left — order now!". Applies to every surface: empty states, notifications, badges, toasts, onboarding.</p>
@@ -531,7 +539,8 @@
       <li><strong>Primary Nav:</strong> Modules + global search + settings + role/persona. Always present.</li>
       <li><strong>KPIs:</strong> Read-only module metrics. Neutral styling.</li>
       <li><strong>Secondary Menu:</strong> Page switcher + actions. <strong>System/distinct actions left</strong>. <strong>Primary actions right</strong>.</li>
-      <li><strong>Table Area:</strong> Table menu and controls belong together. Filter + search left, table controls right.</li>
+      <li><strong>Page Filters</strong> (if the page has a scope that governs every table/KPI below it — e.g. branch/subsidiary): its own row above the Table Area, not inside any one table's toolbar. Broadest scope control first, prominent (can run near full-width); narrower search after. Still the informational side — see §2.</li>
+      <li><strong>Table Area:</strong> Table menu and controls belong together, scoped to that dataset only. Filter + search left (compact — page-wide scope lives in Page Filters above, not here), table controls/actions right.</li>
     </ul>
   </div>
 </section>
@@ -1092,7 +1101,9 @@
 
 <section id="search-filters">
         <h2><i data-lucide="search" width="22" height="22"></i> Search & filters</h2>
-        <p>Keep search scoped correctly: global search in the global bar; dataset search in the table menu row. Filters should be compact and reversible. Layout follows §2's toolbar rule — filters cluster with search on the left; anything consequential (Columns, New, Export, view toggles) sits on the right, never mixed into the same cluster.</p>
+        <p>Keep search scoped correctly: global search in the global bar; page-wide scope + search in a Page Filters row (if the page needs one); dataset search in each table's own menu row. Filters should be compact and reversible. Layout follows §2's toolbar rule — everything informational (scope, filters, search) clusters left; anything that fires a command (Columns, New, Export, view toggles) sits right, never mixed into the same cluster.</p>
+
+        <h4>Table-level (compact, one dataset)</h4>
         <div class="demo-box">
           <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;">
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
@@ -1102,6 +1113,15 @@
             <div style="display:flex;gap:8px;align-items:center;">
               <button class="btn btn-secondary">Columns</button>
             </div>
+          </div>
+        </div>
+
+        <h4>Page-level (prominent, governs every table/KPI on the page)</h4>
+        <p class="note">Example: a branch/subsidiary switch that changes what the whole page shows. Broadest scope anchors first and gets the most visual weight; search narrows within it. Still no command buttons in this row — those stay in each table's own toolbar, on the right.</p>
+        <div class="demo-box">
+          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+            <select class="input" style="min-width:200px;"><option>Branch: All branches</option><option>Auckland</option><option>Christchurch</option></select>
+            <input class="input" style="flex:1;min-width:280px;" placeholder="Search this page…" />
           </div>
         </div>
       </section>
