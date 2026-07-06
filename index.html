@@ -177,6 +177,9 @@
         <h4>Search-first, and filter + search on every column</h4>
         <p>Global search (see <a class="inline-link" href="#command-palette">§10</a>) is the primary way to find anything — not deep navigation trees. Every data table gets column-level filter <em>and</em> search (see <a class="inline-link" href="#tables">§14</a> and <a class="inline-link" href="#search-filters">Search &amp; filters</a>), not just a single global search box bolted on top. This is a Method rule, not a customer-portal nicety — it's the single most load-bearing pattern in an internal operational tool.</p>
 
+        <h4>Toolbar layout: informational left, consequential right</h4>
+        <p>Every toolbar (table menu, page secondary menu, any row that mixes finding-things with doing-things) is split into two clusters, never interleaved: <strong>Search + Filters on the left</strong> — non-destructive, reversible, they only change what you can see — and <strong>Actions/Views on the right</strong> — buttons that do something or change how the data is displayed (New, Export, Columns, card/list view toggle). Pattern: <code>Search &gt; Filters &nbsp;||&nbsp; Editor/Views</code>. Never put a filter chip and a "New Order" button in the same visual cluster — a user should be able to tell "this changes what I see" from "this changes something" without reading the label.</p>
+
         <h4>Informational, never salesy</h4>
         <p>Copy states a fact and offers a neutral action — never manufactured urgency. "Saved pricing is held until 16 Jul" + "Review quotes →", not "Convert before pricing changes!" or "Only 2 left — order now!". Applies to every surface: empty states, notifications, badges, toasts, onboarding.</p>
 
@@ -770,14 +773,17 @@
 
         <p class="note">
           Tables must be: sortable headers, neutral rows, subtle hover, bulk selection, and contextual table actions.
-          Avoid “decorative colour”.
+          Avoid “decorative colour”. Toolbar: <strong>informational left, consequential right</strong> — see §2.
         </p>
 
         <div class="table-container">
           <div class="table-menu">
-            <div class="table-search">
-              <i data-lucide="search" width="16" height="16"></i>
-              <input type="text" placeholder="Search orders..." />
+            <div class="table-menu-left">
+              <button class="btn btn-secondary btn-sm"><i data-lucide="filter" width="16" height="16"></i> Filters</button>
+              <div class="table-search">
+                <i data-lucide="search" width="16" height="16"></i>
+                <input type="text" placeholder="Search orders..." />
+              </div>
             </div>
             <div class="table-actions">
               <div class="view-toggle">
@@ -1086,7 +1092,7 @@
 
 <section id="search-filters">
         <h2><i data-lucide="search" width="22" height="22"></i> Search & filters</h2>
-        <p>Keep search scoped correctly: global search in the global bar; dataset search in the table menu row. Filters should be compact and reversible.</p>
+        <p>Keep search scoped correctly: global search in the global bar; dataset search in the table menu row. Filters should be compact and reversible. Layout follows §2's toolbar rule — filters cluster with search on the left; anything consequential (Columns, New, Export, view toggles) sits on the right, never mixed into the same cluster.</p>
         <div class="demo-box">
           <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;">
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
