@@ -103,6 +103,18 @@ Click the "Print Guidelines" button in the bottom-right corner to print a clean 
 
 ## 📝 Version History
 
+- **v6.0** - Corrected the table-toolbar model against the actual shipped Portal source
+  (`public/assets/app.js`, `styles.css`) and its own ADR
+  (`docs/decisions/0005-transaction-tables-nav-and-branch-model.md`), not just its docs. v5.1–v5.2
+  built an entire left/right "informational vs. consequential" toolbar theory, including a fabricated
+  page-level "scope switch" concept for Branch — none of it matches the real app. What's actually
+  shipped: **two separate rows**, not one split row — an optional page-level action (its own row,
+  above the table, left-aligned, never paired with filters/search) and, inside the table, its own
+  toolbar with filters rendering left and search growing to fill the remaining width to the right
+  (no action buttons in that row at all). Branch is explicitly, per Louis's own ADR-0005, a plain
+  per-table filter — "no context switching... branch becomes a filter, not a global mode" — never a
+  page-wide scope control. Rewrote the toolbar rule, the Tables (§14) and Search & filters demos, and
+  the page-hierarchy "Rules by Row" list to match. `AGENTS.md` corrected to match.
 - **v5.2** - Locked the toolbar-layout criterion after review: the split is **not** informational vs.
   consequential in the abstract, it's **does this fire a command that mutates data/state** — if yes,
   right, always, however minor (New, Approve, Export, Columns); if no, left, always, however big or
