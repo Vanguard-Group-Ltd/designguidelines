@@ -95,7 +95,7 @@
 
       <header>
         <h1>Vanguard UI Design Guidelines</h1>
-        <p class="subtitle">Vanguard Design System • v5.0 — Method (universal) + Brand (Portal-authoritative) + Application (customer-facing / internal tool)</p>
+        <p class="subtitle">Vanguard Design System • v6.0 — Method (universal) + Brand (Portal-authoritative) + Application (customer-facing / internal tool)</p>
       </header>
 
       <!-- LAYERS / FRONT DOOR -->
@@ -177,16 +177,16 @@
         <h4>Search-first, and filter + search on every column</h4>
         <p>Global search (see <a class="inline-link" href="#command-palette">§10</a>) is the primary way to find anything — not deep navigation trees. Every data table gets column-level filter <em>and</em> search (see <a class="inline-link" href="#tables">§14</a> and <a class="inline-link" href="#search-filters">Search &amp; filters</a>), not just a single global search box bolted on top. This is a Method rule, not a customer-portal nicety — it's the single most load-bearing pattern in an internal operational tool.</p>
 
-        <h4>Toolbar layout: everything that shows left, everything that does right</h4>
-        <p>Every toolbar (table menu, page secondary menu, any row that mixes finding-things with doing-things) is split into two clusters, never interleaved. The line is drawn by one test only: <strong>does this button fire a command that changes real data or state?</strong></p>
+        <h4>Table structure: page actions above, filters-then-search inside the table's own toolbar</h4>
+        <p>Verified against the shipped Portal (<code>app.js</code>/<code>styles.css</code>) — this is not a two-cluster left/right split, it's <strong>two separate rows</strong> that must not be merged:</p>
         <ul>
-          <li><strong>Left — informational, whatever its size or importance:</strong> search, filters, and scope controls (e.g. a branch/subsidiary switch). None of these mutate anything — they only change what you can see. A big, important scope control is still left; it just gets more visual weight and anchors first (see ordering below). <strong>Importance changes size and position-within-left, never which side.</strong></li>
-          <li><strong>Right — commands, however minor:</strong> anything that fires and produces a result — New, Approve, Export, Delete, Columns, a card/list view toggle. If it has an icon-plus-button and does something when clicked, it's right, even if it feels small next to a big scope control on the left.</li>
+          <li><strong>Page actions (optional, its own row, above the table):</strong> a page-level primary action — e.g. "+ Build a new quote" — sits alone, left-aligned, directly under the page title, before any table. It is not paired with filters or search. Not every page has one (a page you only browse, like Orders, has none).</li>
+          <li><strong>Table toolbar (inside the table, its own row):</strong> filters — chips or selects, <em>including any scope-like filter such as Branch</em> — render first, left. Search renders last in the same row and grows to fill the remaining space, landing at the row's far right edge. There is <strong>no action button in this row</strong> — Filters and Search are the only two things in it.</li>
         </ul>
-        <p>Pattern: <code>Scope &gt; Filters &gt; Search &nbsp;||&nbsp; Actions/Views</code>. This split is a strict invariant precisely so position alone tells a user "safe to explore" from "this does something," without reading a label — mixing a scope switch and an "Approve Payment" button into one visual cluster because both feel "important" defeats that guarantee.</p>
+        <p>Pattern: <code>Page actions (own row, above)</code> then, inside the table, <code>Filters &nbsp;...&nbsp; Search</code>. Don't invent a combined "filters + search + New button" row — it doesn't exist in the shipped product and it blurs a page-level command into a dataset-scoped control.</p>
 
-        <h4>Ordering and prominence follow the page hierarchy, side never does</h4>
-        <p>Within the left cluster, order broad-to-narrow and size by hierarchy level (see <a class="inline-link" href="#page-hierarchy">§8</a>): a page-wide <strong>scope control</strong> (branch/subsidiary — redefines every table and KPI on the page) anchors first and can run near full-width; a page-wide or table-local <strong>search</strong> sits next, narrower; table-specific <strong>filter chips</strong> come last, compact. A scope control that affects the whole page is <strong>page-level chrome</strong>, sitting above the table area — it does not live inside one table's own toolbar, even though it stays on the informational side. Each table's own local filter + search stays in that table's toolbar, smaller, because it's scoped to just that dataset.</p>
+        <h4>Branch (or any subsidiary/context-like control) is a filter, not a scope switch</h4>
+        <p>Settled on the Portal by <code>docs/decisions/0005-transaction-tables-nav-and-branch-model.md</code>: branch does <strong>not</strong> change what the rest of the page shows. Every list spans all branches the user can see; Branch is one entry in that table's own filter set (alongside Status, Type, etc.), with a Branch column doing the rest of the work. Do not model a "significant" filter as page-level chrome that governs the whole page — if it only narrows one table's rows, it belongs in that table's own filter set, however important it feels.</p>
 
         <h4>Informational, never salesy</h4>
         <p>Copy states a fact and offers a neutral action — never manufactured urgency. "Saved pricing is held until 16 Jul" + "Review quotes →", not "Convert before pricing changes!" or "Only 2 left — order now!". Applies to every surface: empty states, notifications, badges, toasts, onboarding.</p>
@@ -459,24 +459,15 @@
     <div class="hierarchy-row-label purple">Table Area (Dataset-level)</div>
     <div class="hierarchy-row purple-outline">
 
-      <!-- Table Menu: filter + search + controls ON SAME ROW -->
-      <div class="table-menu">
-        <div class="table-menu-left">
-          <button class="btn btn-secondary btn-sm"><i data-lucide="filter" width="16" height="16"></i> Filters</button>
-
-          <div class="table-search">
-            <i data-lucide="search" width="16" height="16"></i>
-            <input type="text" placeholder="Search orders…">
-          </div>
-        </div>
-
-        <div class="table-actions">
-          <button class="btn btn-secondary btn-sm"><i data-lucide="columns-2" width="16" height="16"></i> Columns</button>
-
-          <div class="view-toggle">
-            <button class="view-toggle-btn"><i data-lucide="grid" width="14" height="14"></i> Cards</button>
-            <button class="view-toggle-btn active"><i data-lucide="list" width="14" height="14"></i> List</button>
-          </div>
+      <!-- Table toolbar: filters render first/left, search fills the remaining space and
+           lands at the far right of THIS row. No action buttons in the table toolbar —
+           any page-level action (New/Export) is its own row above, see Secondary Menu. -->
+      <div class="table-menu" style="gap:8px;">
+        <button class="btn btn-secondary btn-sm"><i data-lucide="filter" width="16" height="16"></i> Branch</button>
+        <button class="btn btn-secondary btn-sm">Status</button>
+        <div class="table-search" style="flex:1;min-width:200px;">
+          <i data-lucide="search" width="16" height="16"></i>
+          <input type="text" placeholder="Search orders…" style="width:100%;">
         </div>
       </div>
 
@@ -539,8 +530,8 @@
       <li><strong>Primary Nav:</strong> Modules + global search + settings + role/persona. Always present.</li>
       <li><strong>KPIs:</strong> Read-only module metrics. Neutral styling.</li>
       <li><strong>Secondary Menu:</strong> Page switcher + actions. <strong>System/distinct actions left</strong>. <strong>Primary actions right</strong>.</li>
-      <li><strong>Page Filters</strong> (if the page has a scope that governs every table/KPI below it — e.g. branch/subsidiary): its own row above the Table Area, not inside any one table's toolbar. Broadest scope control first, prominent (can run near full-width); narrower search after. Still the informational side — see §2.</li>
-      <li><strong>Table Area:</strong> Table menu and controls belong together, scoped to that dataset only. Filter + search left (compact — page-wide scope lives in Page Filters above, not here), table controls/actions right.</li>
+      <li><strong>Page action (optional):</strong> a single page-level primary action (e.g. "+ Build a new quote"), its own row, left-aligned, above the table — never paired with filters or search. Not every page has one.</li>
+      <li><strong>Table toolbar:</strong> inside the table, its own row. Filters (including any scope-like filter, e.g. Branch — see §2) render left; search renders last in the same row and fills the remaining space to the far right. No action buttons in this row.</li>
     </ul>
   </div>
 </section>
@@ -782,24 +773,21 @@
 
         <p class="note">
           Tables must be: sortable headers, neutral rows, subtle hover, bulk selection, and contextual table actions.
-          Avoid “decorative colour”. Toolbar: <strong>informational left, consequential right</strong> — see §2.
+          Avoid “decorative colour”. Toolbar: <strong>filters render left, search fills the remaining width to the right — no action buttons in this row</strong> — see §2.
         </p>
 
+        <p class="note">Optional page-level action (its own row, above the table, left-aligned — not paired with filters or search):</p>
+        <div class="demo-row" style="margin-bottom:12px;">
+          <button class="btn btn-primary btn-sm"><i data-lucide="plus" width="14" height="14"></i> Build a new quote</button>
+        </div>
+
         <div class="table-container">
-          <div class="table-menu">
-            <div class="table-menu-left">
-              <button class="btn btn-secondary btn-sm"><i data-lucide="filter" width="16" height="16"></i> Filters</button>
-              <div class="table-search">
-                <i data-lucide="search" width="16" height="16"></i>
-                <input type="text" placeholder="Search orders..." />
-              </div>
-            </div>
-            <div class="table-actions">
-              <div class="view-toggle">
-                <button class="view-toggle-btn"><i data-lucide="grid" width="14" height="14"></i> Cards</button>
-                <button class="view-toggle-btn active"><i data-lucide="list" width="14" height="14"></i> List</button>
-              </div>
-              <button class="btn btn-secondary btn-sm"><i data-lucide="columns" width="14" height="14"></i> Columns</button>
+          <div class="table-menu" style="gap:8px;">
+            <button class="btn btn-secondary btn-sm"><i data-lucide="filter" width="16" height="16"></i> Branch</button>
+            <button class="btn btn-secondary btn-sm">Status</button>
+            <div class="table-search" style="flex:1;min-width:200px;">
+              <i data-lucide="search" width="16" height="16"></i>
+              <input type="text" placeholder="Search orders..." style="width:100%;" />
             </div>
           </div>
 
@@ -1101,27 +1089,21 @@
 
 <section id="search-filters">
         <h2><i data-lucide="search" width="22" height="22"></i> Search & filters</h2>
-        <p>Keep search scoped correctly: global search in the global bar; page-wide scope + search in a Page Filters row (if the page needs one); dataset search in each table's own menu row. Filters should be compact and reversible. Layout follows §2's toolbar rule — everything informational (scope, filters, search) clusters left; anything that fires a command (Columns, New, Export, view toggles) sits right, never mixed into the same cluster.</p>
+        <p>Keep search scoped correctly: global search in the global bar (§10); a page-level primary action, if the page has one, in its own row above the table; dataset filters + search inside each table's own toolbar. There is no combined "filters + search + action" row anywhere in the shipped product — don't invent one.</p>
 
-        <h4>Table-level (compact, one dataset)</h4>
+        <h4>Page-level action (optional, its own row, above the table)</h4>
+        <p class="note">A single primary action, left-aligned, sitting directly under the page title. Not every page has one — a browse-only page (e.g. Orders, which are created by converting a quote, not directly) has none.</p>
         <div class="demo-box">
-          <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;">
-            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-              <button class="btn btn-secondary"><i data-lucide="filter" width="16" height="16"></i> Filters</button>
-              <input class="input" style="min-width:260px;" placeholder="Search orders..." />
-            </div>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <button class="btn btn-secondary">Columns</button>
-            </div>
-          </div>
+          <button class="btn btn-primary btn-sm"><i data-lucide="plus" width="14" height="14"></i> Build a new quote</button>
         </div>
 
-        <h4>Page-level (prominent, governs every table/KPI on the page)</h4>
-        <p class="note">Example: a branch/subsidiary switch that changes what the whole page shows. Broadest scope anchors first and gets the most visual weight; search narrows within it. Still no command buttons in this row — those stay in each table's own toolbar, on the right.</p>
+        <h4>Table toolbar (filters left, search fills right — no action buttons here)</h4>
+        <p class="note">Branch is a plain filter here, not a page-wide scope switch — see §2. Search always renders last and grows to fill the remaining width.</p>
         <div class="demo-box">
-          <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-            <select class="input" style="min-width:200px;"><option>Branch: All branches</option><option>Auckland</option><option>Christchurch</option></select>
-            <input class="input" style="flex:1;min-width:280px;" placeholder="Search this page…" />
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <button class="btn btn-secondary"><i data-lucide="filter" width="16" height="16"></i> Branch</button>
+            <button class="btn btn-secondary">Status</button>
+            <input class="input" style="flex:1;min-width:200px;" placeholder="Search orders..." />
           </div>
         </div>
       </section>
