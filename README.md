@@ -103,6 +103,11 @@ Click the "Print Guidelines" button in the bottom-right corner to print a clean 
 
 ## 📝 Version History
 
+- **v5.1** - Codified the toolbar layout rule as an explicit Method pattern: `Search + Filters` (left,
+  informational/reversible) vs `Actions/Views` (right, consequential) — never interleaved. Corrected
+  the §14 Tables demo, which was missing the Filters button the canonical pattern already has
+  elsewhere, and corrected `AGENTS.md`'s table-toolbar row, which had copied the Portal's older
+  "filter chips on the right" layout verbatim.
 - **v5.0** - Restructured into three layers (Method / Brand / Application) so the guide honestly
   covers both a customer-facing site and an internal operational tool, not just the Portal. Added:
   the "How to use this guide" front-door, the derived-status and search+filter-on-column Method
