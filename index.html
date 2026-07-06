@@ -36,6 +36,7 @@
 
       <div class="sub-nav" role="navigation" aria-label="Section" id="subNav">
         <div class="sub-links" data-top="foundation">
+          <a class="sub-link" href="#layers">How to use this guide</a>
           <a class="sub-link" href="#principles">Principles</a>
           <a class="sub-link" href="#approach">Approach</a>
         </div>
@@ -78,6 +79,8 @@
           <a class="sub-link" href="#permissions-roles">Permissions & roles</a>
           <a class="sub-link" href="#onboarding">Onboarding</a>
           <a class="sub-link" href="#density">Density</a>
+          <a class="sub-link" href="#applications">Applications</a>
+          <a class="sub-link" href="#ai-agents">For AI agents</a>
           <a class="sub-link" href="#accessibility">Accessibility</a>
         </div>
       </div>
@@ -92,8 +95,31 @@
 
       <header>
         <h1>Vanguard UI Design Guidelines</h1>
-        <p class="subtitle">Customer Portal Design System • v4.0 — aligned to the shipped vanguard-portal-prototype</p>
+        <p class="subtitle">Vanguard Design System • v5.0 — Method (universal) + Brand (Portal-authoritative) + Application (customer-facing / internal tool)</p>
       </header>
+
+      <!-- LAYERS / FRONT DOOR -->
+      <section id="layers">
+        <h2><i data-lucide="layers-3" width="22" height="22"></i> 0. How to use this guide</h2>
+        <p>This guide has three layers. Read them in order — each narrows the one before it.</p>
+        <div class="demo-box">
+          <table>
+            <thead>
+              <tr>
+                <th>Layer</th>
+                <th>Applies to</th>
+                <th>Wins on disagreement?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Method</strong></td><td>Every Vanguard digital project, no exceptions</td><td>Never optional</td></tr>
+              <tr><td><strong>Brand</strong></td><td>Colour, type, motion — every project</td><td>The Vanguard Customer Portal is authoritative. If this guide and the shipped Portal ever disagree, the Portal is right.</td></tr>
+              <tr><td><strong>Application</strong></td><td>Pick one: <a class="inline-link" href="#app-customer">Customer-facing</a> or <a class="inline-link" href="#app-internal">Internal tool</a></td><td>Purpose decides density, table weight, and data-viz — not personal preference</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Building or refactoring something? Decide "customer-facing or internal tool" first — it changes density and table patterns everywhere else in this guide. Machine-readable version of this whole system: <a class="inline-link" href="AGENTS.md">AGENTS.md</a> (for AI build agents — see also <a class="inline-link" href="#ai-agents">§22</a>).</p>
+      </section>
 
       <!-- PRINCIPLES -->
       <section id="principles">
@@ -145,6 +171,12 @@
         <h4>Every pattern exists exactly once</h4>
         <p>Before styling a new "selectable option card" or "status pill," check whether an existing component already does the job. Two near-identical hand-rolled versions of the same idea is the failure mode this guide exists to prevent.</p>
 
+        <h4>Smart: status is derived, never hand-written</h4>
+        <p>Status is computed from data through <strong>one</strong> mapping (e.g. a single <code>statusBadge(status)</code> function returning a variant + label), rendered through the one shared badge component. Adding a new status is one line in that map — never a bespoke badge, never a hand-typed label sitting next to hand-picked colours. If a screen shows a status a human had to remember to update, that's a defect, not a feature.</p>
+
+        <h4>Search-first, and filter + search on every column</h4>
+        <p>Global search (see <a class="inline-link" href="#command-palette">§10</a>) is the primary way to find anything — not deep navigation trees. Every data table gets column-level filter <em>and</em> search (see <a class="inline-link" href="#tables">§14</a> and <a class="inline-link" href="#search-filters">Search &amp; filters</a>), not just a single global search box bolted on top. This is a Method rule, not a customer-portal nicety — it's the single most load-bearing pattern in an internal operational tool.</p>
+
         <h4>Informational, never salesy</h4>
         <p>Copy states a fact and offers a neutral action — never manufactured urgency. "Saved pricing is held until 16 Jul" + "Review quotes →", not "Convert before pricing changes!" or "Only 2 left — order now!". Applies to every surface: empty states, notifications, badges, toasts, onboarding.</p>
 
@@ -153,7 +185,7 @@
       <!-- COLOURS -->
       <section id="colours">
         <h2><i data-lucide="palette" width="22" height="22"></i> 3. Colours</h2>
-        <p class="note">Use neutral first. Colour is functional: actions, selection, and status.</p>
+        <p class="note"><strong>Brand layer — Portal-authoritative.</strong> Every value below is copied from the shipped <code>vanguard-portal-prototype</code>. If this page and the Portal ever disagree, the Portal is right. Use neutral first. Colour is functional: actions, selection, and status.</p>
 
         <h3>Primary (Actions & Active State)</h3>
         <p>Primary is used for buttons, selected nav, focus ring, links, and “active” indicators.</p>
@@ -671,6 +703,12 @@
         <div class="demo-row">
           <button class="btn btn-danger"><i data-lucide="trash-2" width="16" height="16"></i> Cancel Order</button>
         </div>
+
+        <h4>Brand flourish — full-width primary CTAs (customer-facing only)</h4>
+        <p>Every full-width primary button (<code>.btn-primary.btn-block</code>) on a customer-facing surface gets a trailing <strong>»</strong> via <code>::after</code> — a deliberate brand touch, not a generic arrow. It does <strong>not</strong> appear on small in-card buttons, modal confirm buttons, or icon-only send buttons. This is Brand (Portal-authoritative), not Method — internal-tool CTAs don't carry it.</p>
+        <div class="demo-row">
+          <button class="btn btn-primary btn-block" style="max-width:280px;">Place order</button>
+        </div>
       </section>
 
       <!-- TAGS -->
@@ -1135,9 +1173,52 @@
         </div>
       </section>
 
+      <!-- APPLICATIONS -->
+      <section id="applications">
+        <h2><i data-lucide="layout-grid" width="22" height="22"></i> 21. Applications — customer-facing vs internal tool</h2>
+        <p>Every Vanguard digital project is one of two applications of the same Method + Brand. Purpose decides density and table weight — not preference. Pick one before you build a screen.</p>
+
+        <h3 id="app-customer">Customer-facing (e.g. the Vanguard Customer Portal)</h3>
+        <ul>
+          <li><strong>Density:</strong> Comfortable (default) — generous whitespace, 36–44px touch targets.</li>
+          <li><strong>Voice:</strong> informational, never salesy (§2).</li>
+          <li><strong>Tables:</strong> line items, orders, invoices — moderate row counts, comfortable padding.</li>
+          <li><strong>Brand flourish</strong> (§11 — the <code>»</code> CTA) applies here.</li>
+        </ul>
+
+        <h3 id="app-internal">Internal tool (e.g. Vanguard WMS)</h3>
+        <ul>
+          <li><strong>Density:</strong> Compact <em>by default</em>, not as a secondary mode — operational users work at high row counts all day.</li>
+          <li><strong>Tables:</strong> dense, high-row-count grids. Column filter + search (§2, §14) is a required capability, not an enhancement — this is the single most-used pattern in an operational tool and it does not change.</li>
+          <li><strong>Operational data-viz palette</strong> — fill levels, warehouse zones, weight capacity, shelf types. Keep the existing <em>meanings</em>, drive them from one documented token ramp, used consistently across plan/floor/elevation views:</li>
+        </ul>
+        <div class="demo-box">
+          <table>
+            <thead>
+              <tr><th>Role</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Fill level</td><td>Low → High, on the semantic success/warning/danger ramp (§3), never a bespoke hue</td></tr>
+              <tr><td>Zone</td><td>One token per zone type, documented once, reused across every view</td></tr>
+              <tr><td>Weight capacity</td><td>Same semantic ramp as fill level — under / near / over capacity</td></tr>
+              <tr><td>Shelf type</td><td>Neutral-ramp tokens (§3 neutral scale) — type is structural, not a status</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="note-box" style="margin-top:16px;">
+          <p><strong>Documented exception, pending migration:</strong> the shipped WMS 2.0 currently uses its own established primary (teal) and typeface (Oracle Sans stack), under a signed-off decision to preserve six months of proven UX rather than reskin it mid-flight. This conflicts with the Brand layer (§3, Portal-authoritative) and is <strong>not resolved by this guide</strong> — it is tracked as a pipeline item pending a dedicated WMS brand re-scope. Until that re-scope lands, build new internal-tool work to this guide's Method + this section's density/table/data-viz rules, and treat WMS's existing teal/Oracle Sans as legacy, not as a second brand to copy forward.</p>
+        </div>
+      </section>
+
+      <!-- AI AGENTS -->
+      <section id="ai-agents">
+        <h2><i data-lucide="bot" width="22" height="22"></i> 22. For AI build agents</h2>
+        <p>This page is written for humans — narrative, examples, rationale. If you are an AI agent scaffolding or refactoring a screen, read <a class="inline-link" href="AGENTS.md">AGENTS.md</a> at the repo root instead: the same rules as flat, unambiguous facts (token tables, a strict decision tree for customer-facing vs internal tool, a class-name → component lookup) with no prose to parse. Treat this HTML page as the source of rationale and <code>AGENTS.md</code> as the source of exact values — if they ever drift, this page is source-of-truth for reasoning, <code>AGENTS.md</code> must be regenerated from it, never edited to disagree.</p>
+      </section>
+
       <!-- ACCESSIBILITY -->
       <section id="accessibility">
-        <h2><i data-lucide="accessibility" width="22" height="22"></i> 21. Accessibility</h2>
+        <h2><i data-lucide="accessibility" width="22" height="22"></i> 23. Accessibility</h2>
         <div class="demo-box">
           <h4>Contrast</h4>
           <p>4.5:1 for text, 3:1 for UI. Colour is never the only indicator.</p>
