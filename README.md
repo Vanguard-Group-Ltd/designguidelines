@@ -103,6 +103,16 @@ Click the "Print Guidelines" button in the bottom-right corner to print a clean 
 
 ## 📝 Version History
 
+- **v5.2** - Locked the toolbar-layout criterion after review: the split is **not** informational vs.
+  consequential in the abstract, it's **does this fire a command that mutates data/state** — if yes,
+  right, always, however minor (New, Approve, Export, Columns); if no, left, always, however big or
+  important (search, filters, scope controls). This fixes v5.1, which still had the wrong call on
+  scope switches: a page-wide control like a branch/subsidiary switch is big and important but
+  mutates nothing, so it stays left — it does **not** earn a spot on the right just because it's
+  significant. Added the distinction between a page-level "Page Filters" row (scope + search,
+  governs every table/KPI on the page, sits above the table area) and each table's own local
+  toolbar (compact, scoped to just that dataset) — corrected `AGENTS.md`'s table-toolbar row, which
+  still had "branch select" on the right from the pre-v5.1 Portal doc description.
 - **v5.1** - Codified the toolbar layout rule as an explicit Method pattern: `Search + Filters` (left,
   informational/reversible) vs `Actions/Views` (right, consequential) — never interleaved. Corrected
   the §14 Tables demo, which was missing the Filters button the canonical pattern already has
