@@ -1,50 +1,73 @@
 :root {
+  /* ============================================================================
+     SOURCE OF TRUTH: the Vanguard Customer Portal prototype's own design system
+     (vanguard-portal-prototype, docs/design-system.md + public/assets/styles.css).
+     Every value below is copied from that shipped, brand-signed-off implementation —
+     not approximated. If this guide and the prototype ever disagree, the prototype
+     is right and this file needs updating, not the other way round.
+     ============================================================================ */
+
   /* Brand (sacred) */
   --color-brand-blue: #004674;
-  --color-brand-red: #ff0000;
+  --color-brand-red: #ed2124;      /* LOGO ONLY. Never used for UI — not danger, not an accent.
+                                       See --color-danger below, which is deliberately a
+                                       different, distinct red. */
 
   /* Primary (accent) — MUST be brand-blue */
   --color-primary: var(--color-brand-blue);
   --color-primary-hover: #003a60;
   --color-primary-active: #002f4d;
-  --color-primary-light: #e6f0f7;
+  --color-primary-light: #ebf3fa;
   --color-primary-muted: #b9d3e6;
 
-  /* Neutral palette (95% of UI) */
-  --color-neutral-900: #111827;
-  --color-neutral-800: #1f2937;
-  --color-neutral-700: #374151;
-  --color-neutral-600: #4b5563;
-  --color-neutral-500: #6b7280;
-  --color-neutral-400: #9ca3af;
-  --color-neutral-300: #d1d5db;
-  --color-neutral-200: #e5e7eb;
-  --color-neutral-100: #f3f4f6;
-  --color-neutral-50: #f9fafb;
-  --color-white: #ffffff;
+  /* Secondary (accent) — sky teal. Vanguard's brand secondary; used for secondary CTAs,
+     accents, links, focus/hover borders on selectable cards. Never the logo red. */
+  --color-secondary: #6fbed9;
+  --color-secondary-dark: #1f6f8f;   /* text/border variant — used ON white, not as a fill */
+  --color-secondary-light: #eaf6fb;
 
-  /* Semantic (status only) */
-  --color-success: #059669;
-  --color-success-light: #d1fae5;
-  --color-warning: #d97706;
-  --color-warning-light: #fef3c7;
-  --color-danger: var(--color-brand-red);
-  --color-danger-light: #fee2e2;
-  --color-info: #0284c7;
-  --color-info-light: #e0f2fe;
+  /* Neutral palette (95% of UI) — this is the Tailwind "Slate" ramp, which is what the
+     prototype's --ink/--muted/--faint/--line/--chrome tokens are drawn from. */
+  --color-neutral-900: #0f172a;   /* = prototype --ink (primary text) */
+  --color-neutral-800: #1e293b;
+  --color-neutral-700: #334155;
+  --color-neutral-600: #475569;   /* = prototype --muted (secondary text, labels) */
+  --color-neutral-500: #64748b;
+  --color-neutral-400: #94a3b8;   /* = prototype --faint (tertiary text, placeholders) */
+  --color-neutral-300: #cbd5e1;
+  --color-neutral-200: #e2e8f0;   /* = prototype --line (all hairline borders) */
+  --color-neutral-100: #f1f5f9;   /* = prototype --chrome (page background) */
+  --color-neutral-50: #f8fafc;    /* = prototype --thead (table header background) */
+  --color-white: #ffffff;         /* = prototype --canvas (card/surface background) */
+
+  /* Semantic (status only) — each is a {bg, border, text} triple, always used together.
+     Status is never colour-alone: pill shape + colour + text label, every time. */
+  --color-success: #15803d;
+  --color-success-light: #f0fdf4;
+  --color-success-border: #bbf7d0;
+  --color-warning: #b45309;
+  --color-warning-light: #fffbeb;
+  --color-warning-border: #fde68a;
+  --color-danger: #dc2626;        /* distinct crimson — NOT brand-red, see note above */
+  --color-danger-light: #fef2f2;
+  --color-danger-border: #fecaca;
+  --color-info: #1d4ed8;
+  --color-info-light: #eff6ff;
+  --color-info-border: #bfdbfe;
 
   /* Typography */
-  --font-family: "Inter", system-ui, -apple-system, sans-serif;
-  --text-heading-xl: 600 28px/1.2 var(--font-family);
-  --text-heading-lg: 600 22px/1.25 var(--font-family);
-  --text-heading-md: 600 18px/1.3 var(--font-family);
-  --text-heading-sm: 600 16px/1.35 var(--font-family);
+  --font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --text-heading-xl: 700 28px/1.2 var(--font-family);
+  --text-heading-lg: 700 22px/1.25 var(--font-family);
+  --text-heading-md: 700 18px/1.3 var(--font-family);
+  --text-heading-sm: 700 16px/1.35 var(--font-family);
   --text-body-lg: 400 15px/1.5 var(--font-family);
   --text-body-md: 400 14px/1.5 var(--font-family);
   --text-body-sm: 400 13px/1.4 var(--font-family);
   --text-body-xs: 400 12px/1.4 var(--font-family);
-  --text-label: 500 12px/1.2 var(--font-family);
-  --text-label-caps: 600 11px/1.2 var(--font-family);
+  --text-label: 600 12px/1.2 var(--font-family);
+  --text-label-caps: 700 11px/1.2 var(--font-family);
+  --text-figure: 800 1.2 var(--font-family);   /* big metric numbers — pair with tabular-nums */
 
   /* Spacing (4px base) */
   --space-0: 4px;
@@ -57,33 +80,40 @@
   --space-7: 40px;
   --space-8: 48px;
 
-  /* Radius (small, crisp) */
-  --radius-xs: 2px;
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-full: 9999px;
+  /* Radius grammar — three named ROLES, not a numeric scale. Every radius in the
+     prototype is one of exactly these three, chosen by role, never a fourth value. */
+  --radius-interactive: 3px;   /* buttons, inputs, small chips, icon buttons */
+  --radius-structural: 5px;    /* cards, tables, panels, larger containers */
+  --radius-overlay: 6px;       /* modals, dropdowns, popovers, the biggest surfaces */
+  --radius-full: 9999px;       /* fully round — avatars, radio dots, pill badges (its own thing, not part of the 3-role grammar) */
+  /* Back-compat aliases so existing component CSS below doesn't need touching */
+  --radius-xs: var(--radius-interactive);
+  --radius-sm: var(--radius-interactive);
+  --radius-md: var(--radius-structural);
+  --radius-lg: var(--radius-overlay);
 
-  /* Elevation (minimal) */
-  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --elevation-2: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --elevation-3: 0 4px 6px rgba(0, 0, 0, 0.07);
+  /* Elevation (minimal) — matches the prototype's --shadow-sm/--shadow-pop */
+  --elevation-1: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --elevation-2: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --elevation-3: 0 8px 28px rgba(15, 23, 42, 0.16);
+  --shadow-lift: 0 10px 24px rgba(31, 111, 143, 0.18);  /* teal-tinted hover "lift" on clickable cards */
 
   /* Borders */
   --border-default: 1px solid var(--color-neutral-200);
   --border-subtle: 1px solid var(--color-neutral-100);
   --border-strong: 1px solid var(--color-neutral-300);
 
-  /* Motion */
+  /* Motion — 100–300ms, transform/opacity/background/border-color/box-shadow only.
+     Always add a prefers-reduced-motion guard on anything animated. */
   --duration-fast: 100ms;
   --duration-normal: 150ms;
+  --duration-slow: 220ms;      /* slide-out panels */
   --easing: ease-out;
 
-
-/* Aliases used by some components */
---color-text: var(--color-neutral-900);
---color-text-muted: var(--color-neutral-600);
---color-border: var(--color-neutral-200);
+  /* Aliases used by some components */
+  --color-text: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-600);
+  --color-border: var(--color-neutral-200);
 }
 
 *,
@@ -206,6 +236,13 @@ code {
   color: var(--color-neutral-700);
 }
 
+.inline-link {
+  color: var(--color-secondary-dark);
+  font-weight: 600;
+  border-bottom: 2px solid var(--color-secondary);
+  text-decoration: none;
+}
+
 ul,
 ol {
   margin: 0 0 var(--space-3) 0;
@@ -273,8 +310,8 @@ kbd {
   gap: 6px;
   padding: 8px var(--space-3);
   font: var(--text-body-sm);
-  font-weight: 500;
-  border: none;
+  font-weight: 600;
+  border: 1.5px solid transparent;   /* reserved even when invisible, so primary/secondary/ghost/danger align pixel-for-pixel */
   border-radius: var(--radius-sm);
   cursor: pointer;
   transition: all var(--duration-fast) var(--easing);
@@ -301,20 +338,22 @@ kbd {
   background: var(--color-primary-hover);
 }
 
+/* Secondary = teal, not neutral grey — this is the brand's secondary accent colour,
+   used for the second-most-important action in a view. */
 .btn-secondary {
   background: var(--color-white);
-  color: var(--color-neutral-700);
-  border: var(--border-default);
+  color: var(--color-secondary-dark);
+  border: 1.5px solid var(--color-secondary);
 }
 
 .btn-secondary:hover {
-  background: var(--color-neutral-50);
-  border-color: var(--color-neutral-300);
+  background: var(--color-secondary-light);
 }
 
 .btn-ghost {
   background: transparent;
   color: var(--color-neutral-600);
+  border: 1.5px solid var(--color-neutral-200);
 }
 
 .btn-ghost:hover {
@@ -322,13 +361,16 @@ kbd {
   color: var(--color-neutral-800);
 }
 
+/* Danger is outlined, not a solid fill — white background, crimson text/border,
+   tinted background on hover. Matches every other non-primary button's weight. */
 .btn-danger {
-  background: var(--color-danger);
-  color: #fff;
+  background: var(--color-white);
+  color: var(--color-danger);
+  border: 1.5px solid var(--color-danger-border);
 }
 
 .btn-danger:hover {
-  background: #cc0000;
+  background: var(--color-danger-light);
 }
 
 .btn-icon {
@@ -835,15 +877,18 @@ tr:hover .row-actions {
   color: var(--color-neutral-400);
 }
 
-/* Tags */
+/* Tags / status badges — pill shape, ALWAYS a {bg, border, text} triple, never a solid
+   fill with white text and never colour alone. This is a hard rule: status must be
+   readable from the text label even if colour perception fails (WCAG SC 1.4.1). */
 .tag {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
+  gap: 5px;
+  padding: 3px 10px;
   font: var(--text-body-xs);
   font-weight: 600;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
+  border: 1px solid;
   white-space: nowrap;
 }
 
@@ -853,45 +898,50 @@ tr:hover .row-actions {
 }
 
 .tag-primary {
-  background: var(--color-primary);
-  color: #fff;
+  background: var(--color-primary-light);
+  border-color: var(--color-primary-muted);
+  color: var(--color-primary);
 }
 
 .tag-success {
-  background: var(--color-success);
-  color: #fff;
+  background: var(--color-success-light);
+  border-color: var(--color-success-border);
+  color: var(--color-success);
 }
 
 .tag-warning {
-  background: var(--color-warning);
-  color: #fff;
+  background: var(--color-warning-light);
+  border-color: var(--color-warning-border);
+  color: var(--color-warning);
 }
 
 .tag-danger {
-  background: var(--color-danger);
-  color: #fff;
+  background: var(--color-danger-light);
+  border-color: var(--color-danger-border);
+  color: var(--color-danger);
 }
 
 .tag-info {
-  background: var(--color-info);
-  color: #fff;
+  background: var(--color-info-light);
+  border-color: var(--color-info-border);
+  color: var(--color-info);
 }
 
 .tag-outline {
   background: var(--color-white);
-  border: 1px solid var(--color-neutral-300);
+  border-color: var(--color-neutral-200);
   color: var(--color-neutral-600);
 }
 
 .tag-outline-primary {
   background: var(--color-primary-light);
-  border: 1px solid var(--color-primary-muted);
+  border-color: var(--color-primary-muted);
   color: var(--color-primary);
 }
 
 .tag.tiny {
   font-size: 10px;
-  padding: 2px 6px;
+  padding: 2px 8px;
 }
 
 /* Forms */

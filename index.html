@@ -9,7 +9,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <!-- All CSS must live in styles.css -->
   <link rel="stylesheet" href="styles.css" />
@@ -92,7 +92,7 @@
 
       <header>
         <h1>Vanguard UI Design Guidelines</h1>
-        <p class="subtitle">Customer Portal Design System • v3.1</p>
+        <p class="subtitle">Customer Portal Design System • v4.0 — aligned to the shipped vanguard-portal-prototype</p>
       </header>
 
       <!-- PRINCIPLES -->
@@ -124,6 +124,9 @@
       <section id="approach">
         <h2><i data-lucide="layout" width="22" height="22"></i> 2. Approach</h2>
 
+        <h4>The feel, above everything: EASY</h4>
+        <p>Intuitive, simple, "I understand it" — no clutter, no clever tricks. Our customers are busy; every interaction must feel effortless. Generous whitespace is the default tool for this — when in doubt, add space, not decoration.</p>
+
         <h4>Desktop-first, responsive</h4>
         <p>Design for desktop as the primary experience. Layouts reflow gracefully on smaller screens.</p>
 
@@ -133,8 +136,17 @@
         <h4>Neutral-dominant (95% rule)</h4>
         <p>Most of the UI uses neutral colours. Reserve colour for primary actions, active states, focus rings, and semantic status.</p>
 
-        <h4>Small radii, crisp lines</h4>
-        <p>Use small radii (4–6px) on cards, buttons and table containers. Prefer subtle borders and minimal elevation.</p>
+        <h4>Small radii, crisp lines — by role, not by feel</h4>
+        <p>Three named roles, never a fourth arbitrary value: <strong>3px interactive</strong> (buttons, inputs, chips), <strong>5px structural</strong> (cards, tables, panels), <strong>6px overlay</strong> (modals, dropdowns, popovers). See <a class="inline-link" href="#radius">Radius &amp; Borders</a>.</p>
+
+        <h4>One primary action per screen</h4>
+        <p>Navy fill (<code>--color-primary</code>) is reserved for <em>the</em> action on the view. Everything else is secondary/ghost/outlined. If two buttons feel equally important, one of them is wrong.</p>
+
+        <h4>Every pattern exists exactly once</h4>
+        <p>Before styling a new "selectable option card" or "status pill," check whether an existing component already does the job. Two near-identical hand-rolled versions of the same idea is the failure mode this guide exists to prevent.</p>
+
+        <h4>Informational, never salesy</h4>
+        <p>Copy states a fact and offers a neutral action — never manufactured urgency. "Saved pricing is held until 16 Jul" + "Review quotes →", not "Convert before pricing changes!" or "Only 2 left — order now!". Applies to every surface: empty states, notifications, badges, toasts, onboarding.</p>
 
       </section>
 
@@ -166,47 +178,73 @@
           </div>
         </div>
 
-        <h3>Brand (Identity Only)</h3>
-        <p>Brand colours are available for identity, but UI interaction should still follow the Primary/Semantic rules.</p>
+        <h3>Secondary (Sky Teal)</h3>
+        <p>Vanguard's brand secondary colour. Used for secondary CTAs, accents, links, and hover/focus borders on selectable cards — the second-most-important thing on a screen, never the primary action.</p>
+        <div class="swatch-grid">
+          <div class="swatch">
+            <div class="swatch-color" style="background: var(--color-secondary);">
+              <code style="color: white;">var(--color-secondary)</code>
+            </div>
+            <div class="swatch-label">secondary</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background: var(--color-secondary-dark);">
+              <code style="color: white;">secondary-dark</code>
+            </div>
+            <div class="swatch-label">text/border on white</div>
+          </div>
+          <div class="swatch">
+            <div class="swatch-color" style="background: var(--color-secondary-light); border: 1px solid var(--color-secondary);">
+              <code>secondary-light</code>
+            </div>
+            <div class="swatch-label">light</div>
+          </div>
+        </div>
+
+        <h3>Brand (Identity Only — logo, never UI)</h3>
+        <p><strong>Brand red does not appear anywhere in the interface.</strong> Not as an error colour, not as an accent, not as a destructive-action colour. It is reserved for the logo mark only. Errors and destructive actions use <code>--color-danger</code> below — a deliberately distinct crimson, never this red. This was a corrected mistake, not an oversight: the old site used red as its primary CTA colour, which this system explicitly moved away from.</p>
         <div class="swatch-grid">
           <div class="swatch">
             <div class="swatch-color" style="background: var(--color-brand-blue);">
               <code style="color: white;">#004674</code>
             </div>
-            <div class="swatch-label">brand-blue</div>
+            <div class="swatch-label">brand-blue (= primary)</div>
           </div>
           <div class="swatch">
             <div class="swatch-color" style="background: var(--color-brand-red);">
-              <code style="color: white;">#ff0000</code>
+              <code style="color: white;">#ED2124</code>
             </div>
-            <div class="swatch-label">brand-red</div>
+            <div class="swatch-label">brand-red — LOGO ONLY</div>
           </div>
         </div>
 
         <h3>Semantic (Status Only)</h3>
+        <p>Every semantic colour is a <strong>{background, border, text}</strong> triple — never a solid fill with white text, and never colour alone. Status must stay legible if colour perception fails (WCAG SC 1.4.1). See the Tags section for the pill treatment these pair with.</p>
         <p>Status colours are for outcomes/alerts only. Avoid using them for navigation or decoration.</p>
         <div class="swatch-grid">
-          <div class="swatch"><div class="swatch-color" style="background: var(--color-success);"><code style="color:white;">success</code></div><div class="swatch-label">success</div></div>
-          <div class="swatch"><div class="swatch-color" style="background: var(--color-warning);"><code style="color:white;">warning</code></div><div class="swatch-label">warning</div></div>
-          <div class="swatch"><div class="swatch-color" style="background: var(--color-danger);"><code style="color:white;">danger</code></div><div class="swatch-label">danger</div></div>
-          <div class="swatch"><div class="swatch-color" style="background: var(--color-info);"><code style="color:white;">info</code></div><div class="swatch-label">info</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:var(--color-success-light);border:1px solid var(--color-success-border);"><code style="color:var(--color-success);">success</code></div><div class="swatch-label">success</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:var(--color-warning-light);border:1px solid var(--color-warning-border);"><code style="color:var(--color-warning);">warning</code></div><div class="swatch-label">warning</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:var(--color-danger-light);border:1px solid var(--color-danger-border);"><code style="color:var(--color-danger);">danger</code></div><div class="swatch-label">danger</div></div>
+          <div class="swatch"><div class="swatch-color" style="background:var(--color-info-light);border:1px solid var(--color-info-border);"><code style="color:var(--color-info);">info</code></div><div class="swatch-label">info</div></div>
         </div>
       </section>
 
       <!-- TYPOGRAPHY -->
       <section id="typography">
         <h2><i data-lucide="type" width="22" height="22"></i> 4. Typography</h2>
-        <p><strong>Font:</strong> Inter. <strong>Case:</strong> Sentence case (except uppercase labels).</p>
+        <p><strong>Font:</strong> Plus Jakarta Sans — the closest free web match to the actual Vanguard brand font (Gilroy, not web-licensed). Inter was evaluated and rejected — not Gilroy-like enough. Swap to real Gilroy web files if they ever arrive. <strong>Case:</strong> Sentence case (except uppercase labels, always paired with letter-spacing).</p>
 
         <div class="demo-box">
-          <p style="font: var(--text-heading-xl); margin-bottom: 8px;">heading-xl — 28px/600</p>
-          <p style="font: var(--text-heading-lg); margin-bottom: 8px;">heading-lg — 22px/600</p>
-          <p style="font: var(--text-heading-md); margin-bottom: 8px;">heading-md — 18px/600</p>
+          <p style="font: var(--text-heading-xl); margin-bottom: 8px;">heading-xl — 28px/700</p>
+          <p style="font: var(--text-heading-lg); margin-bottom: 8px;">heading-lg — 22px/700</p>
+          <p style="font: var(--text-heading-md); margin-bottom: 8px;">heading-md — 18px/700</p>
           <p style="font: var(--text-body-md); margin-bottom: 8px;">body-md — 14px/400 (default)</p>
           <p style="font: var(--text-body-sm); margin-bottom: 8px;">body-sm — 13px/400</p>
-          <p style="font: var(--text-label); margin-bottom: 8px;">label — 12px/500</p>
-          <p style="font: var(--text-label-caps); text-transform: uppercase; letter-spacing: 0.03em;">label-caps — 11px/600</p>
+          <p style="font: var(--text-label); margin-bottom: 8px;">label — 12px/600</p>
+          <p style="font: var(--text-label-caps); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 8px;">label-caps — 11px/700</p>
+          <p style="font-weight:800;font-size:26px;font-variant-numeric:tabular-nums;color:var(--color-primary);">$1,229.27 — big figure, 800 weight, tabular-nums</p>
         </div>
+        <p class="note">Every price, total, and count in the product uses <code>font-variant-numeric: tabular-nums</code> so columns of numbers align — apply this to any monetary or counting figure.</p>
       </section>
 
       <!-- SPACING -->
@@ -228,15 +266,15 @@
       <!-- RADIUS -->
       <section id="radius">
         <h2><i data-lucide="square" width="22" height="22"></i> 6. Radius & Borders</h2>
-        <p>Small radii for a crisp, professional interface. Avoid large rounded corners.</p>
+        <p><strong>Three named roles, not a numeric scale.</strong> Every radius in the product is chosen by what the element <em>is</em>, not by feel — never a fourth arbitrary value. Small and crisp throughout; avoid large rounded corners.</p>
 
         <div class="radius-grid">
-          <div class="radius-item"><div class="radius-box" style="border-radius: 2px;"></div><span class="radius-label">xs 2px</span></div>
-          <div class="radius-item"><div class="radius-box" style="border-radius: 4px;"></div><span class="radius-label">sm 4px</span></div>
-          <div class="radius-item"><div class="radius-box" style="border-radius: 6px;"></div><span class="radius-label">md 6px</span></div>
-          <div class="radius-item"><div class="radius-box" style="border-radius: 8px;"></div><span class="radius-label">lg 8px</span></div>
-          <div class="radius-item"><div class="radius-box" style="border-radius: 9999px;"></div><span class="radius-label">full</span></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius: var(--radius-interactive);"></div><span class="radius-label">interactive 3px<br>buttons · inputs · chips</span></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius: var(--radius-structural);"></div><span class="radius-label">structural 5px<br>cards · tables · panels</span></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius: var(--radius-overlay);"></div><span class="radius-label">overlay 6px<br>modals · dropdowns · popovers</span></div>
+          <div class="radius-item"><div class="radius-box" style="border-radius: var(--radius-full);"></div><span class="radius-label">full<br>avatars · radio dots · pill badges</span></div>
         </div>
+        <p class="note">"full" is its own thing — fully-round elements aren't part of the interactive/structural/overlay grammar, they're a separate shape decision (a person, a selection state, an informational pill).</p>
 
         <h4>Border tokens</h4>
         <ul>
@@ -249,7 +287,7 @@
       <!-- ICONS -->
       <section id="icons">
         <h2><i data-lucide="smile" width="22" height="22"></i> 7. Iconography</h2>
-        <p><strong>Library:</strong> Lucide. <strong>Sizes:</strong> 14px compact, 16px default, 18–20px nav. Icons accompany text—never replace it.</p>
+        <p><strong>Library:</strong> Lucide — the single icon system. <strong>No emoji as icons, no bespoke one-off SVGs</strong> — if an icon isn't in Lucide, that's a sign to reconsider, not to hand-draw one. <strong>Sizes:</strong> 14px compact, 16px default, 18–20px nav (nav icons are the one place icons get extra visual weight). Colour is always inherited (<code>currentColor</code>), never hardcoded on an icon. Icons accompany text — never replace it; status is shape + colour + label, not an icon alone.</p>
 
         <div class="icon-grid">
           <div class="icon-item"><i data-lucide="search" width="20" height="20"></i><span>search</span></div>
