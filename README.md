@@ -1,6 +1,9 @@
 # Vanguard UI Design Guidelines
 
-A comprehensive design system and UI guidelines for Vanguard customer portals.
+Vanguard's design system for **all** digital projects — customer-facing and internal tools. Structured
+in three layers: **Method** (universal, mandatory), **Brand** (Portal-authoritative colour/type/motion),
+**Application** (customer-facing vs internal-tool patterns and density). See `index.html` §0 for the
+full framing, and `AGENTS.md` for a machine-readable version built for AI build agents.
 
 ## 🌐 Live Site
 
@@ -32,15 +35,28 @@ Simply open `index.html` in your browser - no build step required.
 
 ```
 vanguard-ui-guidelines/
-├── index.html      # Complete guidelines (self-contained)
+├── index.html      # Complete guidelines, human-readable (self-contained)
+├── AGENTS.md       # Same rules, machine-readable — for AI build agents
+├── styles.css      # Design tokens + component CSS
 ├── README.md       # This file
 └── .nojekyll       # Tells GitHub Pages not to process with Jekyll
 ```
 
-## 🎨 Design Tokens Reference
+## 🧭 The three layers
 
-Source of truth: the shipped `vanguard-portal-prototype` (`docs/design-system.md` +
-`public/assets/styles.css`). If this repo and the prototype ever disagree, the prototype wins.
+1. **Method** — mandatory on every project, no exceptions: derived status (never hand-written),
+   search-first navigation with column filter+search as a required table capability, one semantic
+   status set, radius by role, five interaction states + focus ring, AA, one icon system, reuse
+   before you build.
+2. **Brand** — colour, type, motion. **Portal-authoritative**: source of truth is the shipped
+   `vanguard-portal-prototype` (`docs/design-system.md` + `public/assets/styles.css`). If this repo
+   and the Portal ever disagree, the Portal wins.
+3. **Application** — pick one per project: **customer-facing** (comfortable density, e.g. the
+   Portal) or **internal tool** (compact density, dense tables, operational data-viz, e.g. WMS 2.0).
+   WMS 2.0's current teal/Oracle Sans is a documented legacy exception to the Brand layer, pending a
+   dedicated re-scope — not a second brand to copy into new projects.
+
+## 🎨 Design Tokens Reference
 
 ### Brand Colours
 - **Brand Blue** `#004674` — the primary colour. Buttons, active nav, headers, focus rings.
@@ -87,6 +103,13 @@ Click the "Print Guidelines" button in the bottom-right corner to print a clean 
 
 ## 📝 Version History
 
+- **v5.0** - Restructured into three layers (Method / Brand / Application) so the guide honestly
+  covers both a customer-facing site and an internal operational tool, not just the Portal. Added:
+  the "How to use this guide" front-door, the derived-status and search+filter-on-column Method
+  patterns, the internal-tool Application section (compact-by-default density, dense tables,
+  operational data-viz palette), the `»` full-width primary CTA flourish as an explicit Brand rule,
+  the WMS 2.0 teal/Oracle Sans documented-legacy-exception note, and `AGENTS.md` — a machine-readable
+  version of this whole system for AI build agents.
 - **v4.0** - Realigned to the shipped `vanguard-portal-prototype` design system: corrected brand
   red (was `#ff0000`, is `#ED2124`, logo-only — never UI), added the secondary teal colour
   (previously missing entirely), corrected font to Plus Jakarta Sans (was Inter), reframed radius
