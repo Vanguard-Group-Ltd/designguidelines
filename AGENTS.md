@@ -26,15 +26,18 @@ Full narrative version with rationale: `index.html`. Brand source of truth:
   status label next to hand-picked colours. New status = one line in the map.
 - Every data table has both column-level filter AND column-level search. Never global-search-only.
 - Global search / command palette is the primary navigation method, not deep nav trees.
-- Toolbar layout: strict invariant is `does this fire a command that mutates data/state?`. If yes →
-  right, always (New, Approve, Delete, Export, Columns, view toggle), regardless of how minor. If no
-  → left, always (search, filters, scope controls like a branch/subsidiary switch), regardless of how
-  big or important. Importance changes SIZE and ORDER within left; it never moves something to the
-  right. Pattern: `Scope > Filters > Search || Actions/Views`.
-- Ordering/sizing on the left follows the page hierarchy, broad-to-narrow: a page-wide scope control
-  (redefines every table/KPI on the page — e.g. branch) anchors first, largest, and lives in its own
-  "Page Filters" row ABOVE the table area, not inside one table's local toolbar. Table-local search +
-  filters stay smaller, inside that table's own toolbar, scoped to just that dataset.
+- Table structure (verified against shipped `app.js`/`styles.css` — this is NOT a two-cluster
+  left/right split, it is TWO SEPARATE ROWS):
+  1. Page-level action (optional, its own row, above the table, left-aligned, e.g. "+ Build a new
+     quote"). Not every page has one. Never paired with filters or search.
+  2. Table toolbar (inside the table, its own row): filters — chips or selects, including any
+     scope-like filter such as Branch — render first/left; search renders LAST in the same row and
+     grows to fill the remaining width, landing at the row's far-right edge. NO action buttons in
+     this row.
+- **Branch (or any subsidiary/context-style control) is a plain filter, not a page-wide scope
+  switch.** It does not change what the rest of the page shows — every list spans everything the
+  user can see, with Branch as one entry in that table's own filter set. Do not build a page-level
+  "scope bar" for a filter just because it feels significant.
 - Zero hardcoded colour/spacing/radius values in component code — every value is a token reference.
 - Exactly one semantic status set: success / warning / danger / info / neutral. Each is a
   `{background, border, text}` triple, always used together. Status is never colour-alone: always
@@ -106,7 +109,7 @@ modal-confirm buttons.
 |---|---|
 | Status indicator | `.badge.{ok,info,warn,neu,err}` — pill, `{bg,border,text}` triple, icon+label |
 | Selectable option (radio-style) card | `.co-method-card` (2-col grid) or `.payopt` (compact list) |
-| Data table | `.tbl` + `.tbl-toolbar` — table-local filters + search left, action/view controls (Columns, view toggle) right. Page-wide scope switches (e.g. branch) are NOT in this toolbar — they live in a separate Page Filters row above the table, per §1 |
+| Data table | `.tbl` + `.tbl-toolbar` — filters (incl. Branch) render left, search grows to fill right. No action buttons in this row; a page-level action, if any, is a separate row above the table, per §1 |
 | Table column filter | `.th-flt` (funnel icon) → `.colflt-pop` (body-mounted popover) |
 | Modal | `.modal-backdrop` → `.modal` → `.mtop`/`.mbody`/`.mfoot`, auto-injected close (`.modal-x`) |
 | Slide-out panel | `.qbackdrop`/`.qpanel`, fixed right, `translateX` transform |
