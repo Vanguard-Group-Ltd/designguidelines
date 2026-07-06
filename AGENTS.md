@@ -26,6 +26,10 @@ Full narrative version with rationale: `index.html`. Brand source of truth:
   status label next to hand-picked colours. New status = one line in the map.
 - Every data table has both column-level filter AND column-level search. Never global-search-only.
 - Global search / command palette is the primary navigation method, not deep nav trees.
+- Toolbar layout is always two clusters, never interleaved: `Search + Filters` on the left
+  (informational — non-destructive, only changes what's visible), `Actions/Views` on the right
+  (consequential — does something or changes how data is displayed: New, Export, Columns, view
+  toggle). Pattern: `Search > Filters || Editor/Views`.
 - Zero hardcoded colour/spacing/radius values in component code — every value is a token reference.
 - Exactly one semantic status set: success / warning / danger / info / neutral. Each is a
   `{background, border, text}` triple, always used together. Status is never colour-alone: always
@@ -97,7 +101,7 @@ modal-confirm buttons.
 |---|---|
 | Status indicator | `.badge.{ok,info,warn,neu,err}` — pill, `{bg,border,text}` triple, icon+label |
 | Selectable option (radio-style) card | `.co-method-card` (2-col grid) or `.payopt` (compact list) |
-| Data table | `.tbl` + `.tbl-toolbar` (search left, filter chips + branch select right) |
+| Data table | `.tbl` + `.tbl-toolbar` — filters + search left, actions/view controls (branch select, Columns, view toggle) right, per §1 toolbar rule |
 | Table column filter | `.th-flt` (funnel icon) → `.colflt-pop` (body-mounted popover) |
 | Modal | `.modal-backdrop` → `.modal` → `.mtop`/`.mbody`/`.mfoot`, auto-injected close (`.modal-x`) |
 | Slide-out panel | `.qbackdrop`/`.qpanel`, fixed right, `translateX` transform |
