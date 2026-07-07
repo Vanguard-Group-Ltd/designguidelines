@@ -15,9 +15,11 @@ Full narrative version with rationale: `index.html`. Brand source of truth:
      YES → Application = customer-facing. Density = comfortable. §5.
      NO  → Application = internal-tool. Density = compact. §6.
 2. Every rule in §1 (Method) applies regardless of the answer above.
-3. Every token in §2 (Brand) applies regardless of the answer above,
-   EXCEPT: WMS 2.0 currently overrides primary colour + typeface — §7 (do not copy this override
-   into a NEW project; it is a legacy exception, not a pattern).
+3. Every token in §2 (Brand) applies regardless of the answer above, EXCEPT typeface: internal
+   tools use §6's Inter typeface/weight scale, not §2's Plus Jakarta Sans — this is the standard
+   for every internal tool, not an exception. WMS 2.0 additionally overrides primary colour only
+   — §7 (do not copy the colour override into a NEW project; it is a legacy exception, not a
+   pattern — the typeface is not an exception, it's §6).
 ```
 
 ## 1. Method — mandatory, every project, no exceptions
@@ -139,10 +141,26 @@ modal-confirm buttons.
   ramp (§2) — never a bespoke hue. Zone type and shelf type use dedicated tokens on the neutral ramp,
   documented once, reused across every view (plan/floor/elevation).
 - No brand CTA flourish (§2) on internal-tool buttons.
+- **Typeface: Inter**, not §2's Plus Jakarta Sans. Load as a variable font (weight range 100–900) so
+  intermediate weights render precisely rather than snapping to fixed Google-Fonts buckets. Inter
+  reads visually heavier than Plus Jakarta Sans/Helvetica at an equal nominal weight, so the weight
+  scale is tuned down rather than reusing §2's numbers verbatim:
+  ```css
+  /* internal-tool weight scale — tuned for Inter */
+  font-weight: 400;  /* body/paragraph — table cell values, descriptions, general text */
+  font-weight: 450;  /* subtle emphasis — secondary labels, muted captions */
+  font-weight: 500;  /* UI chrome — badges, nav bar (location/user), filter chips, form labels */
+  font-weight: 600;  /* headings/strong emphasis — page titles, section headings, primary columns */
+  font-weight: 700;  /* rare/hero — large KPI numbers only */
+  ```
+  **Buttons are an explicit exception at 400**, not the 500 their "UI chrome" role would otherwise
+  imply — bold button text reads as visually "loud" in a high-frequency operational tool where the
+  same button gets clicked dozens of times a shift.
 
 ## 7. Known legacy exception — do not replicate
 
-WMS 2.0 currently uses its own established primary colour (teal, `hsl(192 65% 29%)`) and typeface
-(Oracle Sans stack) instead of §2's brand tokens, under a signed-off decision to preserve its existing
-UX rather than reskin mid-flight. This is tracked as a pending brand re-scope, not a second valid
-brand. **A new internal-tool project uses §2's Brand tokens, not WMS's current teal/Oracle Sans.**
+WMS 2.0 currently uses its own established primary colour (teal, `hsl(192 65% 29%)`) instead of §2's
+brand colour tokens, under a signed-off decision to preserve its existing UX rather than reskin
+mid-flight. This is tracked as a pending brand re-scope, not a second valid brand. **A new
+internal-tool project uses §2's Brand colour tokens, not WMS's teal** — but typeface follows §6
+(Inter) regardless, for every internal tool including WMS; typeface is not part of this exception.

@@ -53,8 +53,11 @@ vanguard-ui-guidelines/
    and the Portal ever disagree, the Portal wins.
 3. **Application** — pick one per project: **customer-facing** (comfortable density, e.g. the
    Portal) or **internal tool** (compact density, dense tables, operational data-viz, e.g. WMS 2.0).
-   WMS 2.0's current teal/Oracle Sans is a documented legacy exception to the Brand layer, pending a
-   dedicated re-scope — not a second brand to copy into new projects.
+   **Internal tools use Inter as their typeface, not the Brand layer's Plus Jakarta Sans** — see
+   Typography below; this is the standard for every internal tool, not a WMS-specific exception.
+   WMS 2.0's current teal primary colour remains a documented legacy exception to the Brand layer's
+   colour tokens, pending a dedicated re-scope — that part (colour only) is not a pattern to copy
+   into new projects.
 
 ## 🎨 Design Tokens Reference
 
@@ -88,14 +91,30 @@ vanguard-ui-guidelines/
 --radius-full:        9999px; /* avatars, radio dots, pill badges */
 ```
 
-### Typography
+### Typography — Brand layer (customer-facing, e.g. the Portal)
 - **Font**: Plus Jakarta Sans (fallback: system-ui) — the closest free web match to the Vanguard
-  brand font Gilroy, which isn't web-licensed. Inter was evaluated and rejected as not
-  Gilroy-like enough.
+  brand font Gilroy, which isn't web-licensed.
 - **Headings**: 700 weight
 - **Body**: 400 weight
 - **Labels**: 600 weight, 12px (uppercase micro-labels: 700 weight, 11px, letter-spacing)
 - Every monetary/counting figure uses `font-variant-numeric: tabular-nums`.
+
+### Typography — Application layer (internal tools, e.g. WMS 2.0)
+**Internal tools use Inter**, not Plus Jakarta Sans — load it as a variable font (weight range
+100–900) so intermediate weights render precisely, not just the fixed Google Fonts buckets. Inter
+reads visually heavier than Plus Jakarta Sans/Helvetica at an equal nominal weight (larger x-height,
+more stroke contrast), so the weight scale is deliberately tuned down rather than reusing the Brand
+layer's numbers verbatim:
+- **Body / paragraph**: 400 (`font-normal`) — table cell values, descriptions, general text.
+- **Subtle emphasis**: 450 (`font-medium`) — secondary labels, muted captions.
+- **UI chrome**: 500 (`font-semibold`) — badges, nav bar (location/user), filter chips, form labels.
+- **Headings / strong emphasis**: 600 (`font-bold`) — page titles, section headings, primary column
+  values, location bar.
+- **Rare / hero**: 700 (`font-extrabold`) — large KPI numbers only.
+- **Buttons are an explicit exception at 400** (`font-normal`), even though they're interactive UI
+  chrome that would otherwise sit at 500 — bold button text reads as visually "loud" in a
+  high-frequency operational tool where the same button is clicked dozens of times a shift.
+- Every monetary/counting figure still uses `font-variant-numeric: tabular-nums`.
 
 ## 🖨️ Printing
 
@@ -103,6 +122,17 @@ Click the "Print Guidelines" button in the bottom-right corner to print a clean 
 
 ## 📝 Version History
 
+- **v7.0** - Internal tools now use **Inter** as their Application-layer typeface, not Plus Jakarta
+  Sans — decided during a live WMS 2.0 design-conformance sweep, comparing Oracle Sans, Helvetica,
+  Plus Jakarta Sans, and Inter directly in the running app. This overrides §7's prior framing (WMS's
+  Oracle Sans as a "legacy exception... pending re-scope"): the typeface question for internal tools
+  is now settled as Inter, for every internal tool, not just WMS. Added the internal-tool weight
+  scale (400/450/500/600/700, deliberately tuned down from the Brand layer's numbers since Inter
+  reads heavier than Plus Jakarta Sans/Helvetica at an equal nominal weight) and the explicit
+  buttons-stay-at-400 exception. Removed the "Inter... rejected as not Gilroy-like enough" line —
+  that was a Brand-layer (Portal) typeface-matching criterion and doesn't apply to the Application
+  layer's internal-tool typeface question; leaving it in read as a blanket rejection of Inter, which
+  is no longer accurate. WMS's teal *colour* remains the only actual legacy exception (§7).
 - **v6.0** - Corrected the table-toolbar model against the actual shipped Portal source
   (`public/assets/app.js`, `styles.css`) and its own ADR
   (`docs/decisions/0005-transaction-tables-nav-and-branch-model.md`), not just its docs. v5.1–v5.2
