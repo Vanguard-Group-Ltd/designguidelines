@@ -275,8 +275,10 @@
       <!-- TYPOGRAPHY -->
       <section id="typography">
         <h2><i data-lucide="type" width="22" height="22"></i> 4. Typography</h2>
-        <p><strong>Font (Brand layer — customer-facing, e.g. the Portal):</strong> Plus Jakarta Sans — the closest free web match to the actual Vanguard brand font (Gilroy, not web-licensed). Swap to real Gilroy web files if they ever arrive. <strong>Case:</strong> Sentence case (except uppercase labels, always paired with letter-spacing). Internal tools use a <strong>different</strong> typeface entirely — Inter, not Plus Jakarta Sans, with its own weight scale — see <a class="inline-link" href="#app-internal">§21</a>.</p>
+        <p>Two typefaces, one per Application layer (<a class="inline-link" href="#applications">§21</a>) — pick the one matching what you're building, not personal preference. Neither is a fallback for the other.</p>
 
+        <h3>Brand layer — customer-facing (e.g. the Portal)</h3>
+        <p><strong>Font:</strong> Plus Jakarta Sans — the closest free web match to the actual Vanguard brand font (Gilroy, not web-licensed). Swap to real Gilroy web files if they ever arrive. <strong>Case:</strong> Sentence case (except uppercase labels, always paired with letter-spacing).</p>
         <div class="demo-box">
           <p style="font: var(--text-heading-xl); margin-bottom: 8px;">heading-xl — 28px/700</p>
           <p style="font: var(--text-heading-lg); margin-bottom: 8px;">heading-lg — 22px/700</p>
@@ -288,6 +290,17 @@
           <p style="font-weight:800;font-size:26px;font-variant-numeric:tabular-nums;color:var(--color-primary);">$1,229.27 — big figure, 800 weight, tabular-nums</p>
         </div>
         <p class="note">Every price, total, and count in the product uses <code>font-variant-numeric: tabular-nums</code> so columns of numbers align — apply this to any monetary or counting figure.</p>
+
+        <h3 class="mt-4">Application layer — internal tools (e.g. Vanguard WMS)</h3>
+        <p><strong>Font: Inter</strong> — a completely different typeface, not a substitute or fallback for Plus Jakarta Sans. Decided during a live WMS 2.0 design-conformance sweep, comparing Oracle Sans, Helvetica, Plus Jakarta Sans, and Inter directly in a running internal tool. Load it as a <strong>variable font</strong> (weight range 100–900), so the weight scale's intermediate values render precisely rather than snapping to fixed Google-Fonts buckets. Inter reads visually heavier than Plus Jakarta Sans/Helvetica at an equal nominal weight (larger x-height, more stroke contrast) — the weight scale below is tuned down accordingly, it is not a straight reuse of the Brand-layer numbers above.</p>
+        <div class="demo-box" style="font-family:'Inter',system-ui,-apple-system,sans-serif;">
+          <p style="font-weight:400;font-size:14px;margin-bottom:8px;">body / paragraph — 400 (table cell values, descriptions, general text)</p>
+          <p style="font-weight:450;font-size:14px;margin-bottom:8px;">subtle emphasis — 450 (secondary labels, muted captions)</p>
+          <p style="font-weight:500;font-size:14px;margin-bottom:8px;">UI chrome — 500 (badges, nav bar, filter chips, form labels)</p>
+          <p style="font-weight:600;font-size:16px;margin-bottom:8px;">headings / strong emphasis — 600 (page titles, section headings, primary column values)</p>
+          <p style="font-weight:700;font-size:22px;font-variant-numeric:tabular-nums;margin-bottom:0;">$1,229.27 — rare/hero, 700 (large KPI numbers only)</p>
+        </div>
+        <p class="note"><strong>Buttons are an explicit exception at 400</strong>, not the 500 their "UI chrome" role would otherwise imply — bold button text reads as visually "loud" in a high-frequency operational tool where the same button gets clicked dozens of times a shift. Full context, density, and table rules for this layer: <a class="inline-link" href="#app-internal">§21</a>.</p>
       </section>
 
       <!-- SPACING -->
