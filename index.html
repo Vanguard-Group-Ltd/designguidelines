@@ -95,7 +95,7 @@
 
       <header>
         <h1>Vanguard UI Design Guidelines</h1>
-        <p class="subtitle">Vanguard Design System • v6.0 — Method (universal) + Brand (Portal-authoritative) + Application (customer-facing / internal tool)</p>
+        <p class="subtitle">Vanguard Design System • v7.0 — Method (universal) + Brand (Portal-authoritative) + Application (customer-facing / internal tool)</p>
       </header>
 
       <!-- LAYERS / FRONT DOOR -->
@@ -275,7 +275,7 @@
       <!-- TYPOGRAPHY -->
       <section id="typography">
         <h2><i data-lucide="type" width="22" height="22"></i> 4. Typography</h2>
-        <p><strong>Font:</strong> Plus Jakarta Sans — the closest free web match to the actual Vanguard brand font (Gilroy, not web-licensed). Inter was evaluated and rejected — not Gilroy-like enough. Swap to real Gilroy web files if they ever arrive. <strong>Case:</strong> Sentence case (except uppercase labels, always paired with letter-spacing).</p>
+        <p><strong>Font (Brand layer — customer-facing, e.g. the Portal):</strong> Plus Jakarta Sans — the closest free web match to the actual Vanguard brand font (Gilroy, not web-licensed). Swap to real Gilroy web files if they ever arrive. <strong>Case:</strong> Sentence case (except uppercase labels, always paired with letter-spacing). Internal tools use a <strong>different</strong> typeface entirely — Inter, not Plus Jakarta Sans, with its own weight scale — see <a class="inline-link" href="#app-internal">§21</a>.</p>
 
         <div class="demo-box">
           <p style="font: var(--text-heading-xl); margin-bottom: 8px;">heading-xl — 28px/700</p>
@@ -1213,8 +1213,43 @@
             </tbody>
           </table>
         </div>
+
+        <h4 style="margin-top:20px;">Typeface: Inter, not the Brand layer's Plus Jakarta Sans</h4>
+        <p>Internal tools use <strong>Inter</strong> (variable font, weight range 100–900 — load it as a
+        variable so intermediate weights render precisely, not just fixed Google-Fonts buckets), decided
+        during a live WMS 2.0 design-conformance sweep after comparing Oracle Sans, Helvetica, Plus
+        Jakarta Sans, and Inter directly in a running internal tool. This is the standard for
+        <strong>every</strong> internal tool, not a WMS-specific carve-out. Inter reads visually heavier
+        than Plus Jakarta Sans/Helvetica at an equal nominal weight (larger x-height, more stroke
+        contrast), so the weight scale is deliberately tuned down rather than reusing the Brand layer's
+        numbers verbatim:</p>
+        <div class="demo-box">
+          <table>
+            <thead>
+              <tr><th>Role</th><th>Weight</th><th>Used for</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Body / paragraph</td><td>400</td><td>table cell values, descriptions, general text</td></tr>
+              <tr><td>Subtle emphasis</td><td>450</td><td>secondary labels, muted captions</td></tr>
+              <tr><td>UI chrome</td><td>500</td><td>badges, nav bar (location/user), filter chips, form labels</td></tr>
+              <tr><td>Headings / strong emphasis</td><td>600</td><td>page titles, section headings, primary column values</td></tr>
+              <tr><td>Rare / hero</td><td>700</td><td>large KPI numbers only</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p><strong>Buttons are an explicit exception at 400</strong>, not the 500 their "UI chrome" role
+        would otherwise imply — bold button text reads as visually "loud" in a high-frequency
+        operational tool where the same button gets clicked dozens of times a shift.</p>
+
         <div class="note-box" style="margin-top:16px;">
-          <p><strong>Documented exception, pending migration:</strong> the shipped WMS 2.0 currently uses its own established primary (teal) and typeface (Oracle Sans stack), under a signed-off decision to preserve six months of proven UX rather than reskin it mid-flight. This conflicts with the Brand layer (§3, Portal-authoritative) and is <strong>not resolved by this guide</strong> — it is tracked as a pipeline item pending a dedicated WMS brand re-scope. Until that re-scope lands, build new internal-tool work to this guide's Method + this section's density/table/data-viz rules, and treat WMS's existing teal/Oracle Sans as legacy, not as a second brand to copy forward.</p>
+          <p><strong>Documented exception (colour only):</strong> the shipped WMS 2.0 currently uses its
+          own established primary colour (teal), under a signed-off decision to preserve six months of
+          proven UX rather than reskin it mid-flight. This conflicts with the Brand layer's colour tokens
+          (§3, Portal-authoritative) and is <strong>not resolved by this guide</strong> — it is tracked as
+          a pipeline item pending a dedicated WMS brand re-scope. <strong>Typeface is NOT part of this
+          exception</strong> — Inter (above) applies to WMS the same as any other internal tool. A new
+          internal-tool project uses §3's Brand colour tokens, not WMS's teal, but follows this section's
+          Inter typeface either way.</p>
         </div>
       </section>
 

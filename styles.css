@@ -56,7 +56,8 @@
   --color-info-border: #bfdbfe;
 
   /* Typography */
-  --font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif; /* Brand layer — customer-facing, e.g. the Portal. This page renders in this by default (it's Brand-layer content). */
+  --font-family-internal-tool: "Inter", system-ui, -apple-system, sans-serif; /* Application layer — every internal tool, incl. WMS. Load as a variable font (weight range 100-900). Weight scale: 400 body/buttons, 450 subtle emphasis, 500 UI chrome, 600 headings, 700 rare/hero — see index.html §21. */
   --text-heading-xl: 700 28px/1.2 var(--font-family);
   --text-heading-lg: 700 22px/1.25 var(--font-family);
   --text-heading-md: 700 18px/1.3 var(--font-family);
