@@ -26,19 +26,28 @@ Full narrative version with rationale: `index.html`. Brand source of truth:
 
 - Status is computed via one mapping function → one shared badge component. Never hand-write a
   status label next to hand-picked colours. New status = one line in the map.
-- Every data table has both column-level filter AND column-level search. Never global-search-only.
+- Every data table has its own search AND the filter builder. Never global-search-only.
 - Global search / command palette is the primary navigation method, not deep nav trees.
-- Table structure (verified against shipped `app.js`/`styles.css` — this is NOT a two-cluster
-  left/right split, it is TWO SEPARATE ROWS):
-  1. Page-level action (optional, its own row, above the table, left-aligned, e.g. "+ Build a new
-     quote"). Not every page has one. Never paired with filters or search.
-  2. Table toolbar (inside the table, its own row): filters — chips or selects, including any
-     scope-like filter such as Branch — render first/left; search renders LAST in the same row and
-     grows to fill the remaining width, landing at the row's far-right edge. NO action buttons in
-     this row.
+- Table structure — separate rows, never merged:
+  1. Page-level action (optional, its own row, above the table, e.g. "+ Build a new quote"). Not
+     every page has one. Never paired with search or filters.
+  2. Table toolbar (inside the table, its own row), ALWAYS this order: Search (first, widest) →
+     Filter (shows the count of applied filters) → Saved views → Columns. NO action buttons
+     (anything that changes data) in this row.
+  3. Applied-filter row (directly under the toolbar), rendered ONLY while something is filtered:
+     one chip per filter (label opens that filter in place, × removes it), then "Clear all". A
+     filter set by clicking a stat card is a chip too — never an invisible filter.
+- **One filter system: the filter builder** (from WMS 3.0 D3-32, pilot-approved 2026-11-19).
+  Filter opens "Filter by": a searchable list of every field, hidden columns included, each active
+  field showing its value. Pick a field → set it (e.g. Status: tick values with counts) → Cancel /
+  Apply, with a back arrow to the list. Below the field list, "Applied filters" lists every filter
+  with × and "Clear all". The same panel is the desktop popover, the tablet side sheet and the
+  phone bottom sheet.
+- **Column headers sort only.** No filter funnel or popover in a header. A filtered column shows a
+  small marker (`.fmark`) next to its heading.
 - **Branch (or any subsidiary/context-style control) is a plain filter, not a page-wide scope
   switch.** It does not change what the rest of the page shows — every list spans everything the
-  user can see, with Branch as one entry in that table's own filter set. Do not build a page-level
+  user can see, with Branch as one field in that table's filter builder. Do not build a page-level
   "scope bar" for a filter just because it feels significant.
 - Zero hardcoded colour/spacing/radius values in component code — every value is a token reference.
 - Exactly one semantic status set: success / warning / danger / info / neutral. Each is a
@@ -111,8 +120,10 @@ modal-confirm buttons.
 |---|---|
 | Status indicator | `.badge.{ok,info,warn,neu,err}` — pill, `{bg,border,text}` triple, icon+label |
 | Selectable option (radio-style) card | `.co-method-card` (2-col grid) or `.payopt` (compact list) |
-| Data table | `.tbl` + `.tbl-toolbar` — filters (incl. Branch) render left, search grows to fill right. No action buttons in this row; a page-level action, if any, is a separate row above the table, per §1 |
-| Table column filter | `.th-flt` (funnel icon) → `.colflt-pop` (body-mounted popover) |
+| Data table | `.tbl` + `.tbl-toolbar` — Search (widest), Filter (+ `.filter-count`), Saved views, Columns, in that order. No action buttons in this row; a page-level action, if any, is a separate row above the table, per §1 |
+| Applied filters | `.fchips` row → `.fchip` (`.fchip-label` opens the filter, `.fchip-x` removes it) → `.fchip-clear` ("Clear all"). Only rendered while something is filtered |
+| Filter builder | `.fbuilder` (`.fh` header, `.fsec` sections, `.ffield` + `.fval` field rows, `.fapplied` applied rows, `.ff` Cancel/Apply footer); `.sheet-side` on tablet, `.sheet-bottom` on phone |
+| Filtered-column marker | `.fmark` in the `<th>`. Headers sort only — no header filter control |
 | Modal | `.modal-backdrop` → `.modal` → `.mtop`/`.mbody`/`.mfoot`, auto-injected close (`.modal-x`) |
 | Slide-out panel | `.qbackdrop`/`.qpanel`, fixed right, `translateX` transform |
 | Toast | `#toast-host` → `.toast` (`.err` variant), success auto-dismiss ~2.6s, error ~4.2s |
@@ -124,7 +135,10 @@ modal-confirm buttons.
 
 - Do not add a fourth radius value "just this once."
 - Do not render a status with a hardcoded colour — go through the shared badge/mapping.
-- Do not ship a table without column filter + search.
+- Do not ship a table without search + the filter builder.
+- Do not put a filter control (funnel, popover, select) in a column header — headers sort only.
+- Do not apply a filter the user cannot see — every applied filter, including one set from a stat
+  card, is a chip with ×, and the row ends in "Clear all".
 - Do not use `--color-brand-red` for anything except the literal logo mark.
 
 ## 5. Application: customer-facing
@@ -136,7 +150,8 @@ modal-confirm buttons.
 ## 6. Application: internal tool
 
 - Density: compact **by default**, not a secondary mode. Table padding 6–8px. Touch targets 28–32px.
-- Column filter + search is a required table capability (§1), not optional.
+- Search + the filter builder is a required table capability (§1), not optional. On tablet the
+  filter panel is a side sheet; on phone a bottom sheet.
 - Operational data-viz: fill level and weight capacity map onto the semantic success/warning/danger
   ramp (§2) — never a bespoke hue. Zone type and shelf type use dedicated tokens on the neutral ramp,
   documented once, reused across every view (plan/floor/elevation).

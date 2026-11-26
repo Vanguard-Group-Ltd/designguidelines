@@ -45,7 +45,7 @@ vanguard-ui-guidelines/
 ## 🧭 The three layers
 
 1. **Method** — mandatory on every project, no exceptions: derived status (never hand-written),
-   search-first navigation with column filter+search as a required table capability, one semantic
+   search-first navigation with search + one filter builder as a required table capability, one semantic
    status set, radius by role, five interaction states + focus ring, AA, one icon system, reuse
    before you build.
 2. **Brand** — colour, type, motion. **Portal-authoritative**: source of truth is the shipped
@@ -122,6 +122,20 @@ Click the "Print Guidelines" button in the bottom-right corner to print a clean 
 
 ## 📝 Version History
 
+- **v8.0** - Replaced column-header filters with **one filter builder**, from WMS 3.0 decision
+  **D3-32** (proven on the Outbound dashboard pilot, simplified at review, approved by Louis
+  2026-11-19 as D3-37). An audit of WMS found three filter systems in one app (header funnels,
+  toolbar chips, a tablet Filters button), search in different places and missing from some lists,
+  and Clear only on some. New Method rule: the table toolbar is always **Search** (widest),
+  **Filter** (with the applied count), **Saved views**, **Columns**; Filter opens "Filter by", a
+  searchable list of every field (hidden columns too) — pick a field, set it, Apply — with Applied
+  filters and Clear all underneath; applied filters show as removable chips above the table with
+  **Clear all**, including filters set from a stat card; headers sort only, and a filtered column
+  shows a small marker; the same panel is the tablet side sheet and the phone bottom sheet. Search
+  + filter stay a required capability. Retired `.th-flt`/`.colflt-pop` (they were documented in
+  `AGENTS.md` but never styled here); added `.fchips`/`.fchip`/`.fchip-clear`, `.fmark`,
+  `.fbuilder` and `.filter-count`, named to match the WMS 3.0 pages. Rewrote §2 Approach, §8 Page
+  Hierarchy's table area, §14 Tables and the Search & filters demos; `AGENTS.md` matches.
 - **v7.0** - Internal tools now use **Inter** as their Application-layer typeface, not Plus Jakarta
   Sans — decided during a live WMS 2.0 design-conformance sweep, comparing Oracle Sans, Helvetica,
   Plus Jakarta Sans, and Inter directly in the running app. This overrides §7's prior framing (WMS's

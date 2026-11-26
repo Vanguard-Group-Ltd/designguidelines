@@ -95,7 +95,7 @@
 
       <header>
         <h1>Vanguard UI Design Guidelines</h1>
-        <p class="subtitle">Vanguard Design System • v7.0 — Method (universal) + Brand (Portal-authoritative) + Application (customer-facing / internal tool)</p>
+        <p class="subtitle">Vanguard Design System • v8.0 — Method (universal) + Brand (Portal-authoritative) + Application (customer-facing / internal tool)</p>
       </header>
 
       <!-- LAYERS / FRONT DOOR -->
@@ -174,19 +174,29 @@
         <h4>Smart: status is derived, never hand-written</h4>
         <p>Status is computed from data through <strong>one</strong> mapping (e.g. a single <code>statusBadge(status)</code> function returning a variant + label), rendered through the one shared badge component. Adding a new status is one line in that map — never a bespoke badge, never a hand-typed label sitting next to hand-picked colours. If a screen shows a status a human had to remember to update, that's a defect, not a feature.</p>
 
-        <h4>Search-first, and filter + search on every column</h4>
-        <p>Global search (see <a class="inline-link" href="#command-palette">§10</a>) is the primary way to find anything — not deep navigation trees. Every data table gets column-level filter <em>and</em> search (see <a class="inline-link" href="#tables">§14</a> and <a class="inline-link" href="#search-filters">Search &amp; filters</a>), not just a single global search box bolted on top. This is a Method rule, not a customer-portal nicety — it's the single most load-bearing pattern in an internal operational tool.</p>
+        <h4>Search-first, and search + filter on every table</h4>
+        <p>Global search (see <a class="inline-link" href="#command-palette">§10</a>) is the primary way to find anything — not deep navigation trees. Every data table also gets its own search box <em>and</em> the filter builder (see <a class="inline-link" href="#tables">§14</a> and <a class="inline-link" href="#search-filters">Search &amp; filters</a>), not just a single global search box bolted on top. This is a Method rule, not a customer-portal nicety — it's the single most load-bearing pattern in an internal operational tool.</p>
 
-        <h4>Table structure: page actions above, filters-then-search inside the table's own toolbar</h4>
-        <p>Verified against the shipped Portal (<code>app.js</code>/<code>styles.css</code>) — this is not a two-cluster left/right split, it's <strong>two separate rows</strong> that must not be merged:</p>
+        <h4>One filter system: the filter builder, never column-header filters</h4>
+        <p>Proven on the WMS 3.0 pilot (decision D3-32, approved 2026-11-19). Before it, one app had three filter systems at once — header funnels, toolbar chips and a tablet Filters button — and only some lists could clear their filters. Now there is exactly one:</p>
         <ul>
-          <li><strong>Page actions (optional, its own row, above the table):</strong> a page-level primary action — e.g. "+ Build a new quote" — sits alone, left-aligned, directly under the page title, before any table. It is not paired with filters or search. Not every page has one (a page you only browse, like Orders, has none).</li>
-          <li><strong>Table toolbar (inside the table, its own row):</strong> filters — chips or selects, <em>including any scope-like filter such as Branch</em> — render first, left. Search renders last in the same row and grows to fill the remaining space, landing at the row's far right edge. There is <strong>no action button in this row</strong> — Filters and Search are the only two things in it.</li>
+          <li><strong>The Filter button opens "Filter by":</strong> a searchable list of every field, hidden columns included, each active field showing its current value. Pick a field, set it (e.g. Status: tick values, with counts), Apply. Below the field list, <strong>Applied filters</strong> lists every filter with × and <strong>Clear all</strong>.</li>
+          <li><strong>Applied filters show as chips above the table</strong>, in their own row, only when something is filtered: one chip per filter, click the label to change it in place, × to remove it, then <strong>Clear all</strong>. A filter set by clicking a stat card is a chip too — a filter is never invisible.</li>
+          <li><strong>Column headers sort only.</strong> No funnel, no popover in the header. A filtered column shows a small marker next to its heading.</li>
+          <li><strong>One panel on every device:</strong> the same filter panel is a popover on desktop, a side sheet on tablet and a bottom sheet on phone.</li>
         </ul>
-        <p>Pattern: <code>Page actions (own row, above)</code> then, inside the table, <code>Filters &nbsp;...&nbsp; Search</code>. Don't invent a combined "filters + search + New button" row — it doesn't exist in the shipped product and it blurs a page-level command into a dataset-scoped control.</p>
+
+        <h4>Table structure: page actions above, a fixed toolbar inside the table</h4>
+        <p>Separate rows that must not be merged:</p>
+        <ul>
+          <li><strong>Page actions (optional, its own row, above the table):</strong> a page-level primary action — e.g. "+ Build a new quote" — sits in its own row before any table. It is not paired with search or filters. Not every page has one (a page you only browse, like Orders, has none).</li>
+          <li><strong>Table toolbar (inside the table, its own row), always in this order:</strong> <strong>Search</strong> (first and widest), <strong>Filter</strong> (showing the count of applied filters), <strong>Saved views</strong>, <strong>Columns</strong>. Same order on every list, so search is always in the same place. No button that changes data goes in this row.</li>
+          <li><strong>Applied-filter row:</strong> directly under the toolbar, only while something is filtered.</li>
+        </ul>
+        <p>Pattern: <code>Page actions (own row, above)</code> then, inside the table, <code>Search ··· Filter (n) · Saved views · Columns</code>, then <code>chips · Clear all</code> when filtered. Don't invent a combined "search + filters + New button" row — it blurs a page-level command into a dataset-scoped control.</p>
 
         <h4>Branch (or any subsidiary/context-like control) is a filter, not a scope switch</h4>
-        <p>Settled on the Portal by <code>docs/decisions/0005-transaction-tables-nav-and-branch-model.md</code>: branch does <strong>not</strong> change what the rest of the page shows. Every list spans all branches the user can see; Branch is one entry in that table's own filter set (alongside Status, Type, etc.), with a Branch column doing the rest of the work. Do not model a "significant" filter as page-level chrome that governs the whole page — if it only narrows one table's rows, it belongs in that table's own filter set, however important it feels.</p>
+        <p>Settled on the Portal by <code>docs/decisions/0005-transaction-tables-nav-and-branch-model.md</code>: branch does <strong>not</strong> change what the rest of the page shows. Every list spans all branches the user can see; Branch is one field in that table's filter builder (alongside Status, Type, etc.), with a Branch column doing the rest of the work. Do not model a "significant" filter as page-level chrome that governs the whole page — if it only narrows one table's rows, it belongs in that table's own filter set, however important it feels.</p>
 
         <h4>Informational, never salesy</h4>
         <p>Copy states a fact and offers a neutral action — never manufactured urgency. "Saved pricing is held until 16 Jul" + "Review quotes →", not "Convert before pricing changes!" or "Only 2 left — order now!". Applies to every surface: empty states, notifications, badges, toasts, onboarding.</p>
@@ -472,16 +482,21 @@
     <div class="hierarchy-row-label purple">Table Area (Dataset-level)</div>
     <div class="hierarchy-row purple-outline">
 
-      <!-- Table toolbar: filters render first/left, search fills the remaining space and
-           lands at the far right of THIS row. No action buttons in the table toolbar —
-           any page-level action (New/Export) is its own row above, see Secondary Menu. -->
+      <!-- Table toolbar, fixed order: Search (widest), Filter (count), Saved views, Columns.
+           No action buttons in the table toolbar — any page-level action (New/Export) is
+           its own row above, see Secondary Menu. -->
       <div class="table-menu" style="gap:8px;">
-        <button class="btn btn-secondary btn-sm"><i data-lucide="filter" width="16" height="16"></i> Branch</button>
-        <button class="btn btn-secondary btn-sm">Status</button>
-        <div class="table-search" style="flex:1;min-width:200px;">
+        <div class="table-search">
           <i data-lucide="search" width="16" height="16"></i>
-          <input type="text" placeholder="Search orders…" style="width:100%;">
+          <input type="text" placeholder="Search orders…" aria-label="Search" style="width:100%;" />
         </div>
+        <button class="btn btn-ghost btn-sm" aria-haspopup="dialog"><i data-lucide="filter" width="16" height="16"></i> Filter <span class="filter-count" aria-label="1 filters applied">1</span></button>
+        <button class="btn btn-ghost btn-sm"><i data-lucide="bookmark" width="16" height="16"></i> Saved views</button>
+        <button class="btn btn-ghost btn-sm"><i data-lucide="columns-3" width="16" height="16"></i> Columns</button>
+      </div>
+      <div class="fchips" aria-label="Applied filters">
+        <span class="fchip"><button class="fchip-label" aria-label="Change Branch filter">Branch: <b>Wellington</b></button><button class="fchip-x" aria-label="Remove Branch filter"><i data-lucide="x" width="14" height="14"></i></button></span>
+        <button class="fchip-clear">Clear all</button>
       </div>
 
       <!-- Table -->
@@ -530,7 +545,7 @@
       </div>
 
       <p class="note mt-3" style="margin-bottom: 0;">
-        Table patterns include: sortable columns, filters, bulk selection, row actions, and a bulk action toolbar when selections exist.
+        Table patterns include: sortable columns, search + the filter builder, applied-filter chips, bulk selection, row actions, and a bulk action toolbar when selections exist.
       </p>
     </div>
   </div>
@@ -543,8 +558,9 @@
       <li><strong>Primary Nav:</strong> Modules + global search + settings + role/persona. Always present.</li>
       <li><strong>KPIs:</strong> Read-only module metrics. Neutral styling.</li>
       <li><strong>Secondary Menu:</strong> Page switcher + actions. <strong>System/distinct actions left</strong>. <strong>Primary actions right</strong>.</li>
-      <li><strong>Page action (optional):</strong> a single page-level primary action (e.g. "+ Build a new quote"), its own row, left-aligned, above the table — never paired with filters or search. Not every page has one.</li>
-      <li><strong>Table toolbar:</strong> inside the table, its own row. Filters (including any scope-like filter, e.g. Branch — see §2) render left; search renders last in the same row and fills the remaining space to the far right. No action buttons in this row.</li>
+      <li><strong>Page action (optional):</strong> a single page-level primary action (e.g. "+ Build a new quote"), its own row, above the table — never paired with search or filters. Not every page has one.</li>
+      <li><strong>Table toolbar:</strong> inside the table, its own row, always Search (widest), Filter (with the applied count), Saved views, Columns. Branch and any other scope-like filter is a field in the filter builder — see §2. No action buttons in this row.</li>
+      <li><strong>Applied filters:</strong> a chip row under the toolbar, only while something is filtered, ending in Clear all. Headers sort only; a filtered column shows a small marker.</li>
     </ul>
   </div>
 </section>
@@ -786,22 +802,28 @@
 
         <p class="note">
           Tables must be: sortable headers, neutral rows, subtle hover, bulk selection, and contextual table actions.
-          Avoid “decorative colour”. Toolbar: <strong>filters render left, search fills the remaining width to the right — no action buttons in this row</strong> — see §2.
+          Avoid “decorative colour”. Toolbar, always in this order: <strong>Search (widest), Filter (with the applied count), Saved views, Columns — no action buttons in this row</strong>. Applied filters show as chips with Clear all; headers sort only, and a filtered column carries a small marker (<code>.fmark</code>) — see §2.
         </p>
 
-        <p class="note">Optional page-level action (its own row, above the table, left-aligned — not paired with filters or search):</p>
+        <p class="note">Optional page-level action (its own row, above the table — not paired with search or filters):</p>
         <div class="demo-row" style="margin-bottom:12px;">
           <button class="btn btn-primary btn-sm"><i data-lucide="plus" width="14" height="14"></i> Build a new quote</button>
         </div>
 
         <div class="table-container">
           <div class="table-menu" style="gap:8px;">
-            <button class="btn btn-secondary btn-sm"><i data-lucide="filter" width="16" height="16"></i> Branch</button>
-            <button class="btn btn-secondary btn-sm">Status</button>
-            <div class="table-search" style="flex:1;min-width:200px;">
+            <div class="table-search">
               <i data-lucide="search" width="16" height="16"></i>
-              <input type="text" placeholder="Search orders..." style="width:100%;" />
+              <input type="text" placeholder="Search orders…" aria-label="Search" style="width:100%;" />
             </div>
+            <button class="btn btn-ghost btn-sm" aria-haspopup="dialog"><i data-lucide="filter" width="16" height="16"></i> Filter <span class="filter-count" aria-label="2 filters applied">2</span></button>
+            <button class="btn btn-ghost btn-sm"><i data-lucide="bookmark" width="16" height="16"></i> Saved views</button>
+            <button class="btn btn-ghost btn-sm"><i data-lucide="columns-3" width="16" height="16"></i> Columns</button>
+          </div>
+          <div class="fchips" aria-label="Applied filters">
+            <span class="fchip"><button class="fchip-label" aria-label="Change Status filter">Status: <b>Processing, In Transit</b></button><button class="fchip-x" aria-label="Remove Status filter"><i data-lucide="x" width="14" height="14"></i></button></span>
+            <span class="fchip"><button class="fchip-label" aria-label="Change Branch filter">Branch: <b>Wellington</b></button><button class="fchip-x" aria-label="Remove Branch filter"><i data-lucide="x" width="14" height="14"></i></button></span>
+            <button class="fchip-clear">Clear all</button>
           </div>
 
           <table>
@@ -812,7 +834,7 @@
                 <th>Products</th>
                 <th class="sortable sorted">Date <span class="sort-icon"><i data-lucide="chevron-down" width="14" height="14"></i></span></th>
                 <th class="align-right">Total</th>
-                <th>Status</th>
+                <th>Status <span class="fmark" role="img" aria-label="Filtered" title="Filtered"></span></th>
                 <th class="align-right">Actions</th>
               </tr>
             </thead>
@@ -837,19 +859,6 @@
                 <td>Jan 8, 2026</td>
                 <td class="align-right">$1,450.00</td>
                 <td><span class="tag tag-info"><i data-lucide="truck" width="12" height="12"></i> In Transit</span></td>
-                <td class="align-right">
-                  <div class="row-actions">
-                    <button class="btn btn-ghost btn-sm btn-icon" aria-label="View"><i data-lucide="eye" width="14" height="14"></i></button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><input type="checkbox" class="table-checkbox" aria-label="Select row"></td>
-                <td><code>ORD-2026-0887</code></td>
-                <td>Forklift safety cage</td>
-                <td>Jan 5, 2026</td>
-                <td class="align-right">$895.00</td>
-                <td><span class="tag tag-success"><i data-lucide="check" width="12" height="12"></i> Delivered</span></td>
                 <td class="align-right">
                   <div class="row-actions">
                     <button class="btn btn-ghost btn-sm btn-icon" aria-label="View"><i data-lucide="eye" width="14" height="14"></i></button>
@@ -962,7 +971,7 @@
 
       <section id="tooltips-popovers">
         <h2><i data-lucide="info" width="22" height="22"></i> Tooltips & Popovers</h2>
-        <p>Tooltips explain icons. Popovers provide lightweight controls (e.g., table filters). Keep them small and keyboard accessible.</p>
+        <p>Tooltips explain icons. Popovers provide lightweight controls (e.g., the filter panel on desktop — see <a class="inline-link" href="#search-filters">Search &amp; filters</a>). Keep them small and keyboard accessible.</p>
         <div class="demo-box">
           <div class="popover-mock">
             <div class="muted" style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;">Filter by mode</div>
@@ -1101,24 +1110,76 @@
       </section>
 
 <section id="search-filters">
-        <h2><i data-lucide="search" width="22" height="22"></i> Search & filters</h2>
-        <p>Keep search scoped correctly: global search in the global bar (§10); a page-level primary action, if the page has one, in its own row above the table; dataset filters + search inside each table's own toolbar. There is no combined "filters + search + action" row anywhere in the shipped product — don't invent one.</p>
+        <h2><i data-lucide="search" width="22" height="22"></i> Search &amp; filters</h2>
+        <p>Keep search scoped correctly: global search in the global bar (§10); a page-level primary action, if the page has one, in its own row above the table; dataset search + the filter builder inside each table's own toolbar. There is one filter system — the filter builder. Column headers never carry filters. <span class="muted">(From WMS 3.0 decision D3-32, proven on a pilot and approved 2026-11-19.)</span></p>
 
         <h4>Page-level action (optional, its own row, above the table)</h4>
-        <p class="note">A single primary action, left-aligned, sitting directly under the page title. Not every page has one — a browse-only page (e.g. Orders, which are created by converting a quote, not directly) has none.</p>
+        <p class="note">A single primary action. Not every page has one — a browse-only page (e.g. Orders, which are created by converting a quote, not directly) has none.</p>
         <div class="demo-box">
           <button class="btn btn-primary btn-sm"><i data-lucide="plus" width="14" height="14"></i> Build a new quote</button>
         </div>
 
-        <h4>Table toolbar (filters left, search fills right — no action buttons here)</h4>
-        <p class="note">Branch is a plain filter here, not a page-wide scope switch — see §2. Search always renders last and grows to fill the remaining width.</p>
-        <div class="demo-box">
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-            <button class="btn btn-secondary"><i data-lucide="filter" width="16" height="16"></i> Branch</button>
-            <button class="btn btn-secondary">Status</button>
-            <input class="input" style="flex:1;min-width:200px;" placeholder="Search orders..." />
+        <h4>Table toolbar and applied filters</h4>
+        <p class="note">Always Search (widest), Filter (with the applied count), Saved views, Columns — the same order on every list. The chip row appears only while something is filtered; a filter set from a stat card (here, the Overdue card) is a chip like any other. Click a chip's label to change that filter in place; × removes it.</p>
+        <div class="table-container">
+          <div class="table-menu" style="gap:8px;">
+            <div class="table-search">
+              <i data-lucide="search" width="16" height="16"></i>
+              <input type="text" placeholder="Search orders…" aria-label="Search" style="width:100%;" />
+            </div>
+            <button class="btn btn-ghost " aria-haspopup="dialog"><i data-lucide="filter" width="16" height="16"></i> Filter <span class="filter-count" aria-label="2 filters applied">2</span></button>
+            <button class="btn btn-ghost "><i data-lucide="bookmark" width="16" height="16"></i> Saved views</button>
+            <button class="btn btn-ghost "><i data-lucide="columns-3" width="16" height="16"></i> Columns</button>
+          </div>
+          <div class="fchips" aria-label="Applied filters">
+            <span class="fchip"><button class="fchip-label" aria-label="Change Status filter">Status: <b>Processing</b></button><button class="fchip-x" aria-label="Remove Status filter"><i data-lucide="x" width="14" height="14"></i></button></span>
+            <span class="fchip"><button class="fchip-label" aria-label="Change Overdue filter">Overdue: <b>Yes</b></button><button class="fchip-x" aria-label="Remove Overdue filter"><i data-lucide="x" width="14" height="14"></i></button></span>
+            <button class="fchip-clear">Clear all</button>
           </div>
         </div>
+
+        <h4>The filter panel</h4>
+        <p class="note">Filter opens "Filter by": search the fields, pick one, set it, Apply. Every field is listed, hidden columns too; an active field shows its value. Applied filters are listed underneath with × and Clear all — the same filters as the chips. The same panel is the side sheet on tablet (<code>.fbuilder.sheet-side</code>) and the bottom sheet on phone (<code>.fbuilder.sheet-bottom</code>).</p>
+        <div class="demo-row" style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;">
+          <div class="fbuilder" role="dialog" aria-label="Filter by">
+            <div class="fh">Filter by</div>
+            <div class="fsec">
+              <div class="table-search" style="min-width:0;">
+                <i data-lucide="search" width="16" height="16"></i>
+                <input type="text" placeholder="Search fields…" aria-label="Search fields" />
+              </div>
+            </div>
+            <div class="fsec">
+              <button class="ffield">Branch <i data-lucide="chevron-right" width="16" height="16"></i></button>
+              <button class="ffield">Customer <i data-lucide="chevron-right" width="16" height="16"></i></button>
+              <button class="ffield">Overdue <span class="fval">Yes</span></button>
+              <button class="ffield">Ship date <i data-lucide="chevron-right" width="16" height="16"></i></button>
+              <button class="ffield">Status <span class="fval">Processing</span></button>
+            </div>
+            <div class="fsec">
+              <div class="fsec-title">Applied filters <button class="fchip-clear">Clear all</button></div>
+              <div class="fapplied"><span>Status: <b>Processing</b></span><button class="btn btn-ghost btn-sm btn-icon" aria-label="Remove Status filter"><i data-lucide="x" width="14" height="14"></i></button></div>
+              <div class="fapplied"><span>Overdue: <b>Yes</b></span><button class="btn btn-ghost btn-sm btn-icon" aria-label="Remove Overdue filter"><i data-lucide="x" width="14" height="14"></i></button></div>
+            </div>
+          </div>
+
+          <div class="fbuilder" role="dialog" aria-label="Status filter">
+            <div class="fh"><button class="btn btn-ghost btn-sm btn-icon" aria-label="Back to fields"><i data-lucide="arrow-left" width="16" height="16"></i></button> Status</div>
+            <div class="fsec">
+              <label class="check"><input type="checkbox" checked /> Processing <span class="fcount">42</span></label>
+              <label class="check"><input type="checkbox" /> In Transit <span class="fcount">17</span></label>
+              <label class="check"><input type="checkbox" /> Delivered <span class="fcount">230</span></label>
+              <label class="check"><input type="checkbox" /> Cancelled <span class="fcount">6</span></label>
+            </div>
+            <div class="ff">
+              <button class="btn btn-ghost btn-sm">Cancel</button>
+              <button class="btn btn-primary btn-sm">Apply</button>
+            </div>
+          </div>
+        </div>
+
+        <h4>Headers sort only</h4>
+        <p class="note">No funnel or popover in a column header. A filtered column shows a small marker (<code>.fmark</code>) beside its heading, so you can see which columns are narrowing the list.</p>
       </section>
 
       <section id="empty-loading-error">
@@ -1210,7 +1271,7 @@
         <h3 id="app-internal">Internal tool (e.g. Vanguard WMS)</h3>
         <ul>
           <li><strong>Density:</strong> Compact <em>by default</em>, not as a secondary mode — operational users work at high row counts all day.</li>
-          <li><strong>Tables:</strong> dense, high-row-count grids. Column filter + search (§2, §14) is a required capability, not an enhancement — this is the single most-used pattern in an operational tool and it does not change.</li>
+          <li><strong>Tables:</strong> dense, high-row-count grids. Search + the filter builder (§2, §14, Search &amp; filters) is a required capability, not an enhancement — this is the single most-used pattern in an operational tool and it does not change. On tablet the filter panel is a side sheet, on phone a bottom sheet.</li>
           <li><strong>Operational data-viz palette</strong> — fill levels, warehouse zones, weight capacity, shelf types. Keep the existing <em>meanings</em>, drive them from one documented token ramp, used consistently across plan/floor/elevation views:</li>
         </ul>
         <div class="demo-box">
@@ -1288,7 +1349,7 @@
       </section>
 
       <footer class="doc-footer">
-        <p class="note">Vanguard UI Design Guidelines v7.0 • Method + Brand + Application (customer-facing and internal tool)</p>
+        <p class="note">Vanguard UI Design Guidelines v8.0 • Method + Brand + Application (customer-facing and internal tool)</p>
       </footer>
 
     </main>
