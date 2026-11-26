@@ -720,7 +720,7 @@ kbd {
 
 .table-menu {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   padding: var(--space-2) var(--space-3);
   border-bottom: var(--border-default);
@@ -1521,12 +1521,179 @@ tr:hover .row-actions {
 .blue-outline { outline: 2px solid #38bdf8; outline-offset: 2px; border-radius: var(--radius-sm); }
 .purple-outline { outline: 2px solid #8b5cf6; outline-offset: 2px; border-radius: var(--radius-sm); }
 
-/* table-menu needs a left container for filter + search (single row) */
-.table-menu-left {
+/* ── Table toolbar + filter builder (v8.0, from WMS 3.0 D3-32) ─────────────
+   Toolbar order is fixed: Search (widest) → Filter (with applied count) →
+   Saved views → Columns. Applied filters show as chips in their own row.
+   Headers sort only; a filtered column carries .fmark. One filter panel
+   (.fbuilder) serves desktop popover, tablet side sheet and phone bottom
+   sheet. Class names match the WMS 3.0 pages (wms.css) on purpose. */
+.table-menu { flex-wrap: wrap; }
+.table-menu .table-search { flex: 1 1 260px; min-width: 0; }
+@media (max-width: 600px) {
+  .table-menu .table-search { flex-basis: 100%; } /* phone: search gets its own line, buttons wrap under it */
+}
+
+.filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Applied-filter row: rendered only when at least one filter is applied */
+.fchips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-bottom: var(--border-default);
+  background: var(--color-white);
+}
+
+.fchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  padding: 0 2px 0 var(--space-2);
+  border: var(--border-strong);
+  border-radius: var(--radius-interactive);
+  background: var(--color-white);
+  font-size: 13px;
+  color: var(--color-neutral-900);
+}
+
+.fchip b { font-weight: 600; }
+
+/* Label opens that filter in place; × removes it */
+.fchip button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-interactive);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: background var(--duration-fast) var(--easing);
+}
+.fchip .fchip-label { display: inline; padding: 2px 4px 2px 0; } /* inline keeps the space after "Field:" */
+.fchip .fchip-label:hover { text-decoration: underline; }
+.fchip .fchip-x { width: 22px; height: 22px; justify-content: center; }
+.fchip .fchip-x:hover { background: var(--color-neutral-100); }
+.fchip button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 1px; }
+
+.fchip-clear {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-primary);
+  border: 0;
+  background: transparent;
+  padding: 4px var(--space-1);
+  border-radius: var(--radius-interactive);
+  cursor: pointer;
+}
+.fchip-clear:hover { text-decoration: underline; }
+.fchip-clear:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 1px; }
+
+/* Small marker on the header of a filtered column (headers sort only) */
+.fmark {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 4px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  vertical-align: middle;
+}
+
+/* The filter panel: "Filter by" field list, one field's filter, applied filters */
+.fbuilder {
+  width: 340px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border: var(--border-strong);
+  border-radius: var(--radius-overlay);
+  box-shadow: var(--elevation-3);
+}
+.fbuilder .fh {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--border-default);
+  font-weight: 600;
+  color: var(--color-neutral-900);
 }
+.fbuilder .fsec {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--border-default);
+}
+.fbuilder .fsec:last-child { border-bottom: 0; }
+.fbuilder .fsec-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-neutral-600);
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fbuilder .ffield {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: 6px var(--space-1);
+  border: 0;
+  border-radius: var(--radius-interactive);
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-neutral-900);
+  text-align: left;
+  cursor: pointer;
+}
+.fbuilder .ffield:hover { background: var(--color-neutral-100); }
+.fbuilder .ffield:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -2px; }
+.fbuilder .ffield .fval { color: var(--color-primary); font-weight: 500; font-size: 13px; }
+.fbuilder .fapplied {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: var(--color-neutral-900);
+}
+.fbuilder .fcount { color: var(--color-neutral-600); font-variant-numeric: tabular-nums; margin-left: auto; }
+.fbuilder .ff {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-top: var(--border-default);
+}
+
+/* Same panel, touch sizes: tablet side sheet and phone bottom sheet */
+.fbuilder.sheet-side { width: 400px; height: 100%; border-radius: 0; border-width: 0 0 0 1px; }
+.fbuilder.sheet-bottom { width: 100%; border-radius: var(--radius-overlay) var(--radius-overlay) 0 0; }
+.fbuilder.sheet-side .ffield,
+.fbuilder.sheet-bottom .ffield { min-height: 48px; font-size: 16px; }
 
 /* Print */
 @media print {
